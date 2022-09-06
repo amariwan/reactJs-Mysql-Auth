@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en_US">
+
+<head>
+  <!--=============== basic  ===============-->
+  <title>tasio.finance</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="index" />
+  <meta name="Description" content="This is my finance system" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="tasio.finance" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="index" />
+  <meta name="theme-color" content="#fff">
+  <meta name="author" content="Aland Mariwan">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <!--=============== favicons ===============-->
+  <link rel="shortcut" href="src/img/logo.png">
+  <link rel="icon" href="src/img/logo.png">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="src/img/logo.png">
+  <link rel="apple-touch-startup-image" sizes="180x180" href="src/img/logo.png">
+  <!--=============== css  ===============-->
+  <link rel="stylesheet" href="./src/css/style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap"
+    rel="stylesheet">
+  <!--=============== JS  ===============-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+</head>
+
+<body>
+  <header>
+    <p id="logo">tasio<span class="green">.</span>finance<span class="green">$</span></p>
+  </header>
+
+  <main class="container">
+    <section id="balance">
+      <h2 class="sr-only">Swing</h2>
+      <div class="card">
+        <h3>
+          <span>Tickets</span>
+          <img src="./src/img/income.svg" alt="Imagem Entradas">
+        </h3>
+        <p id="incomeDisplay">$ 0,00</p>
+      </div>
+      <div class="card">
+        <h3>
+          <span>Outputs</span>
+          <img src="./src/img/expense.svg" alt="Imagem Saídas">
+        </h3>
+        <p id="expenseDisplay">$ 0,00</p>
+      </div>
+      <div class="card total">
+        <h3>
+          <span>Total</span>
+          <img src="./src/img/total.svg" alt="Imagem Total">
+        </h3>
+        <p id="totalDisplay">$ 0,00</p>
+      </div>
+    </section>
+
+    <section id="transactions">
+      <h2 class="sr-only">Transactions</h2>
+      <a onClick="Modal.open()" class="btn-new" href="#">+ New Transaction</a>
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <div class="modal-overlay">
+    <div class="modal">
+      <div id="form">
+        <h2>New Transaction</h2>
+        <form action="" onsubmit="Form.submit(event)">
+          <div class="input-group">
+            <label for="description" class="sr-only">
+              Description
+            </label>
+            <input type="text" id="description" name="description" placeholder="Description" />
+          </div>
+
+          <div class="input-group">
+            <label for="amount" class="sr-only">
+              Value
+            </label>
+            <input type="number" step="0.01" id="amount" name="amount" placeholder="0,00" />
+            <small class="help">if the sign - (negative) for expenses and , (comma) for houses
+              decimals</small>
+          </div>
+
+          <div class="input-group">
+            <label for="date" class="sr-only">
+              Date
+            </label>
+            <input type="date" id="date" name="date" placeholder="01/01/2021" />
+          </div>
+
+          <div class="input-group actions">
+            <a onClick="Modal.close()" href="#" class="btn-cancel">Cancel</a>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>tasio<span class="green">.</span>finance<span class="green">$</span></p>
+  </footer>
+
+  <script src="./src/js/scripts.js"></script>
+</body>
+
+</html>
