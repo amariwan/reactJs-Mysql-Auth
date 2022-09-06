@@ -1,0 +1,152 @@
+/* Googel Fonts  */
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
+
+
+.flat-color-1 {
+    color: #000000;
+}
+
+.flat-color-2 {
+    color: #000000;
+}
+
+.flat-color-3 {
+    color: #000000;
+}
+
+.flat-color-4 {
+    color: #000000;
+}
+
+.br-0 {
+    border: none !important;
+}
+
+.black-rgba {
+    background-color: rgba(74, 99, 17, 0.15) !important;
+}
+
+body {
+    background-color: #113059;
+    display: table;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    width: 100%;
+}
+
+p {
+    font-size: 16px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    line-height: 24px;
+    color: #878787;
+}
+
+.content {
+    float: left;
+    padding: 1.875em;
+    width: 100%;
+}
+
+
+
+.card {
+    margin-bottom: 1.875em;
+    border-radius: 5px;
+    padding: 0;
+    border: 0px solid transparent;
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.card .box-title {
+    font-weight: 700;
+    font-size: 1.5em;
+    padding: 5px 0;
+}
+
+
+.stat-widget-five {
+    min-height: 80px;
+}
+
+.stat-widget-five .stat-icon {
+    font-size: 50px;
+    line-height: 50px;
+    position: absolute;
+    left: 30px;
+    top: 20px;
+}
+
+.stat-widget-five .stat-content {
+    margin-left: 100px;
+}
+
+.stat-widget-five .stat-text {
+    color: #455a64;
+    font-size: 20px;
+}
+
+.stat-widget-five .stat-heading {
+    color: #000000;
+    font-size: 14px;
+}
+
+
+/*-------------------------------------------------------------------------------------*/
+
+
+@media (max-width: 1680px) {
+    .timeline li {
+        padding: 2px 0;
+    }
+}
+
+@media (max-width: 1368px) {
+    .stat-widget-one .stat-content {
+        margin-left: 15px;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .content {
+        padding: 1.25em;
+    }
+
+    .card {
+        margin-bottom: 1.25em;
+    }
+
+    .card .card-header {
+        position: relative;
+    }
+
+    .card .card-header strong {
+        display: block;
+    }
+
+    .card .card-header small {
+        float: left;
+    }
+
+    .card .card-header .card-actions {
+        right: 0;
+        top: .75rem;
+        position: absolute;
+    }
+
+    .card-footer.bg-white.br-0.pl-5.pr-5.pt-0.pb-5 {
+        padding-bottom: 1.5em !important;
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+    }
+}
+
+@media (max-width: 992px) {
+    [class*="col"].no-padding {
+        -webkit-box-flex: 0;
+        -ms-flex: none;
+        flex: none;
+    }
+}
