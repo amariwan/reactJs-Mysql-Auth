@@ -36,6 +36,20 @@ or
 ```bash
 npm start
 ```
+
+## 🦠  errorcodes messages 
+
+A table that shows the error codes and their respective messages.
+| code  | Msg  |
+| :------------ |:---------------:|
+| 100 | username or Email already registered|
+| 101 | Invalid email|
+| 102 | Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.|
+| 103 | Invalid email|
+| 104 | Not registered user!|
+| 105 | Email or password incorrect|
+| 106 | User successfully registered|
+
 ## 🚀 Libraries used
 * [express](https://www.npmjs.com/package/express)
 * [mysql](https://www.npmjs.com/package/mysql)
