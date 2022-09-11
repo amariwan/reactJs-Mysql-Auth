@@ -1,121 +1,120 @@
-import "../Styles/login.css"
-import * as yup from "yup";
-import { ErrorMessage, Formik, Form, Field } from "formik";
-import Axios from "axios";
-import Img from "../Assets/result.svg"
+import '../Styles/login.css';
+import * as yup from 'yup';
+import { ErrorMessage, Formik, Form, Field } from 'formik';
+import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+let notify = null;
 
-function Login({logado=false}) {
-  const handleLogin = (values) => {
-    Axios.post("http://localhost:3001/login", {
-      email: values.email,
-      password: values.password,
-    }).then((response) => {
+const Login = ({ logado = false }) => {
+	const [ isActive, setIsActive ] = useState(false);
+	const handleLogin = (values) => {
+		notify = toast.loading('Loading...');
+		Axios.post('http://localhost:3001/login', {
+			email: values.email,
+			password: values.password
+		}).then((response) => {
+			const page = response.data;
+			if (page === true) {
+				localStorage.setItem('@user', JSON.stringify(response.config.data));
+				window.location.reload();
+			} else {
+				if (response.data.code === 100)
+					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 101)
+					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 102)
+					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 103)
+					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 104)
+					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 105)
+					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+			}
+		});
+	};
 
-      const page = response.data;
+	const validationsLogin = yup.object().shape({
+		email: yup.string().min(5, 'invalid email').required('Email is required'),
+		password: yup
+			.string()
+			.min(8, 'The password must be at least 8 characters long')
+			.required('The password is required')
+	});
 
-      if (page === true) {
-        localStorage.setItem('@user', JSON.stringify(response.config.data));
-        window.location.reload();
-      } else {
-        alert(response.data.msg);
-      }
+	const validationsRegister = yup.object().shape({
+		email: yup.string().min(8, 'invalid email').required('Email is required'),
+		password: yup
+			.string()
+			.min(8, 'The password must be at least 8 characters long')
+			.required('The password is required'),
+		confirmation: yup
+			.string()
+			.oneOf([ yup.ref('password'), null ], 'Passwords are different')
+			.required('Password confirmation is mandatory')
+	});
 
-    });
-  };
+	const show_hide_password = (target) => {
+		let showHide = document.getElementById('password-control');
+		var input = document.getElementById('password-input');
+		if (input.getAttribute('type') === 'password') {
+			setIsActive((current) => !current);
+			input.setAttribute('type', 'text');
+		} else {
+			setIsActive((current) => !current);
+			input.setAttribute('type', 'password');
+		}
+		return false;
+	};
 
-  const handleRegister = (values) => {
-    Axios.post("http://localhost:3001/Register", {
-      email: values.email,
-      password: values.password,
-    }).then((response) => {
-      alert(response.data.msg);
-      console.log(response);
-    });
-  };
-
-  const validationsLogin = yup.object().shape({
-    email: yup
-      .string()
-      .min(5,"invalid email")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(8, "The password must be at least 8 characters long")
-      .required("The password is required"),
-  });
-
-  const validationsRegister = yup.object().shape({
-    email: yup
-      .string()
-      .min(8,"invalid email")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(8, "The password must be at least 8 characters long")
-      .required("The password is required"),
-    confirmation: yup
-      .string()
-      .oneOf([yup.ref("password"), null], "Passwords are different")
-      .required("Password confirmation is mandatory"),
-  });
-
-  return (
-    
-    <div className="body">
-
-
-      <div className="right-login">
-        <div className="card-login">
-          <div className="user-links">
-            <div className="user-link-home">
-              {!logado && <Link to="/">Home</Link>}
-            </div>
-
-            <div className="user-link-cad">
-              {!logado && <Link to="/Register">Register</Link>}
-            </div>
-          </div>
-          <h1>LOGIN</h1>
-          <Formik
-            initialValues={{}}
-            onSubmit={handleLogin}
-            validationSchema={validationsLogin}
-          >
-            <Form className="login-form">
-              <div className="form-group">
-                <label form="email">Email/username</label>
-
-                <Field name="email" type='username' className="form-field" placeholder="username or email" autocomplete="username" />
-
-                <ErrorMessage
-                  component="span"
-                  name="email"
-                  className="form-error"
-                />
-              </div>
-              <div className="form-group">
-                <label form="email">password</label>
-                <Field name="password" type='password' className="form-field" placeholder="password" />
-
-                <ErrorMessage
-                  component="span"
-                  name="password"
-                  className="form-error"
-                />
-              </div>
-
-              <button className="button" type="submit">
-                Sing in
-              </button>
-            </Form>
-          </Formik>
-        </div>
-      </div>
-    </div>
-  );
-}
+	return (
+		<section>
+			<div className="box">
+				<div className="square" />
+				<div className="square" />
+				<div className="square" />
+				<div className="square" />
+				<div className="square" />
+				<div className="square" />
+				<div className="container">
+					<div className="form">
+						<h2>LOGIN</h2>
+						<Formik initialValues={{}} onSubmit={handleLogin} validationSchema={validationsLogin}>
+							<Form className="LoginForm">
+								<div className="inputBx">
+									<Field name="email" type="username" className="inputBox" autoComplete="username" />
+									<span className="spanInput">Email/username</span>
+									<i className="fas fa-user-circle" />
+									<ErrorMessage component="span" name="email" className="form-error" />
+								</div>
+								<div className="inputBx password">
+									<Field name="password" type="password" className="inputBox" id="password-input" />
+									<span className="spanInput">password</span>
+									<a
+										href="#"
+										className={isActive ? 'password-control view' : 'password-control'}
+										onClick={(event) => show_hide_password(event, 100)}
+									/>
+									<i className="fas fa-key" />
+									<ErrorMessage component="span" name="password" className="form-error" />
+								</div>
+								{/* <label className="remember">
+                  <input type="checkbox" /> Remember me
+                </label> */}
+								<div className="inputBx">
+									<input type="submit" value="login" />
+								</div>
+							</Form>
+						</Formik>
+						<p>Forgot password? {!logado && <Link to="/Register">Click Here</Link>}</p>
+						<p>Don't have an account {!logado && <Link to="/Register">Sign up</Link>}</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+};
 
 export default Login;
-
-
