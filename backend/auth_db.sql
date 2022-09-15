@@ -1,4 +1,3 @@
--- Host: 127.0.0.1
 -- Server version: 8.0.30-mysql
 
 --
@@ -29,3 +28,18 @@ ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
+
+
+--
+-- AUTO_INCREMENT for table `sessions_users`
+--
+
+CREATE TABLE `sessions_users` (
+  id int unsigned not null auto_increment primary key,
+  `userId` varchar(255) DEFAULT NULL,
+  `sessions_user` varchar(255) DEFAULT NULL,
+  `mac_address` varchar(255) DEFAULT NULL,
+  `browser_id` varchar(255) DEFAULT NULL,
+  `createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `LastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
