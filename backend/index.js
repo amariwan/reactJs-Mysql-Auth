@@ -1,16 +1,31 @@
 /* This is importing the modules that we need to use in our application. */
 const express = require('express');
+const mysql = require('mysql');
 const cors = require('cors');
-const db = require('./database/index');
-const check = require('./check/check_userOrEmail');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 const saltRounds = 10;
 
-var d = new Date('year', 'month', 'day', 'hour', 'minute', 'second', 'millisecond');
-console.log(d);
+/* This is creating a connection to the database. */
+var db = mysql.createPool({
+	connectionLimit: 10,
+	host: process.env.host,
+	user: process.env.user,
+	password: process.env.password,
+	port: process.env.port,
+	database: process.env.database
+});
+
+/* This is creating a connection to the database. */
+db.getConnection((err, connection) => {
+	if (err) throw err;
+	console.log('DB connected successful: ' + connection.threadId);
+	connection.release();
+});
 
 /* This is a middleware that is used to parse the body of the request. */
 const app = express();
@@ -52,13 +67,13 @@ app.post('/Register', (req, res) => {
 	console.log(username, email, password);
 
 	/* This is checking if the email is valid. */
-	if (!check.isEmail(email)) {
+	if (!isEmail(email)) {
 		res.send({ msg: 'Invalid email', code: 101 });
 		return;
 	}
 
 	/* This is checking if the username is valid. */
-	if (!check.checkUsername(username)) {
+	if (!checkUsername(username)) {
 		res.send({
 			msg:
 				'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
@@ -119,10 +134,10 @@ app.post('/login', (req, res) => {
 	var userOrEmail = 'username';
 
 	/* This is checking if the email or username. */
-	if (check.isEmail(email)) {
+	if (isEmail(email)) {
 		userOrEmail = 'email';
 	} else {
-		if (!check.checkUsername(email)) {
+		if (!checkUsername(email)) {
 			res.send({
 				msg:
 					'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
@@ -145,14 +160,8 @@ app.post('/login', (req, res) => {
 					res.send(err);
 				}
 				if (response == true) {
-					db.query('UPDATE listings SET job_checkout_timestamp = CURRENT_TIMESTAMP', (err, response) => {
-						if (err) res.send(err);
-
-						console.log(response);
-						req.session.user = result;
-						console.log(req.session.user);
-						res.send(result);
-					});
+					console.log(response);
+					res.send(response);
 				} else {
 					res.send({ msg: 'Email or password incorrect', code: 105 });
 				}
@@ -162,6 +171,53 @@ app.post('/login', (req, res) => {
 		}
 	});
 });
+
+/* This is . */
+checkDBTable('users');
+function checkDBTable(table) {
+	db.query('SELECT * FROM ' + table, null, function(err, result) {
+		if (err) throw err.sqlMessage;
+	});
+}
+
+/**
+ * It checks if the email is valid or not
+ * @param email - The email address to validate.
+ * @returns A function that takes an email as an argument and returns true or false.
+ */
+let isEmail = (email) => {
+	// don't remember from where i copied this code, but this works.
+	let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+	if (re.test(email)) {
+		// this is a valid email address
+		// call setState({email: email}) to update the email
+		// or update the data in redux store.
+		return true;
+	} else {
+		// invalid email, maybe show an error to the user.
+		return false;
+	}
+};
+
+/**
+ * It checks if the username is valid or not
+ * @param username - The username to check.
+ * @returns A function that takes in a username and returns a boolean.
+ */
+let checkUsername = (username) => {
+	// don't remember from where i copied this code, but this works.
+	let re = /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/;
+	if (re.test(username)) {
+		// this is a valid username
+		// call setState({username: username}) to update the username
+		// or update the data in redux store.
+		return true;
+	} else {
+		// invalid username, maybe show an error to the user.
+		return false;
+	}
+};
 
 /* This is telling the server to listen to port 3001. */
 app.listen(3001, () => {
