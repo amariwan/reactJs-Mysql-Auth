@@ -11,7 +11,7 @@ const Register = ({ logado = false }) => {
 
 	const handleRegister = (values) => {
 		// const notify = toast.loading('Loading...');
-		Axios.post('http://localhost:3001/Register', {
+		Axios.post('http://localhost:3001/auth/Register', {
 			username: values.username,
 			email: values.email,
 			password: values.password

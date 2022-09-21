@@ -11,7 +11,7 @@ const Login = ({ logado = false }) => {
 	const [ isActive, setIsActive ] = useState(false);
 	const handleLogin = (values) => {
 		notify = toast.loading('Loading...');
-		Axios.post('http://localhost:3001/login', {
+		Axios.post('http://localhost:3001/auth/login', {
 			email: values.email,
 			password: values.password
 		}).then((response) => {
