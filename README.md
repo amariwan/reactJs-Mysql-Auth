@@ -41,7 +41,7 @@ npm start
 
 A table that shows the error codes and their respective messages.
 | code  | Msg  |
-| :------------ |:---------------:|
+| :------------ |:---------------|
 | 100 | username or Email already registered|
 | 101 | Invalid email|
 | 102 | Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.|
