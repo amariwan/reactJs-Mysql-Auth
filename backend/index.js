@@ -7,6 +7,7 @@ const cors = require('cors'); //  A middleware that is used to parse the body of
 const app = express();
 const SERVERPORT = process.env.SERVERPORT;
 
+
 // app middleware
 app.use(express.json());
 app.use(express.urlencoded({
