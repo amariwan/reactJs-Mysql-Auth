@@ -51,7 +51,12 @@ A table that shows the error codes and their respective messages.
 | 106 | User successfully registered|
 
 ## 🚀 Libraries used
+
+  Backend: 
 * [express](https://www.npmjs.com/package/express)
+* [express-session](https://www.npmjs.com/package/express-session)
+* [cors](https://www.npmjs.com/package/cors)
+* [cookie-parser](https://www.npmjs.com/package/cookie-parser)
 * [mysql](https://www.npmjs.com/package/mysql)
 * [nodemon](https://www.npmjs.com/package/nodemon)
 * [cors](https://www.npmjs.com/package/cors)

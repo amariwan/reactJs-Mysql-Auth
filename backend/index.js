@@ -1,12 +1,10 @@
 /* This is importing the modules that we need to use in our application. */
 const express = require('express');
-const app = express();
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
-const PORT = 3001;
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const app = express();
+const SERVERPORT = process.env.SERVERPORT;
 
 // app middleware
 app.use(express.json());
@@ -47,6 +45,6 @@ app.use('/auth', authRouter);
 
 
 /* This is telling the server to listen to port 3001. */
-app.listen(PORT, () => {
-    console.log('running in the ${PORT}');
+app.listen(SERVERPORT, () => {
+    console.log('running in the ${SERVERPORT}');
 });
