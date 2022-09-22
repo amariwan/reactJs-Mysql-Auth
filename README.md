@@ -52,6 +52,12 @@ A table that shows the error codes and their respective messages.
 
 ## 🚀 Libraries used
 
+  Frontend: 
+* [react](https://reactjs.org/)
+* [react-dom](https://www.npmjs.com/package/react-dom)
+* [react-hot-toast](https://www.npmjs.com/package/react-hot-toast)
+
+
   Backend: 
 * [express](https://www.npmjs.com/package/express)
 * [express-session](https://www.npmjs.com/package/express-session)
