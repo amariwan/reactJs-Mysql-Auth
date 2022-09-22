@@ -34,12 +34,12 @@ COMMIT;
 -- AUTO_INCREMENT for table `sessions_users`
 --
 
-CREATE TABLE `sessions_users` (
-  id int unsigned not null auto_increment primary key,
+CREATE TABLE `sessions_users` ( 
   `userId` varchar(255) DEFAULT NULL,
-  `sessions_user` varchar(255) DEFAULT NULL,
+  `session_id` varchar(128) COLLATE utf8mb4_bin NOT NULL,
   `mac_address` varchar(255) DEFAULT NULL,
   `browser_id` varchar(255) DEFAULT NULL,
   `createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `LastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `LastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
