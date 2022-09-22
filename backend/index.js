@@ -45,10 +45,6 @@ app.use(express.static('static'));
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
-address(function(err, addrs) {
-    console.log(addrs.ip, addrs.ipv6, addrs.mac);
-    // '192.168.0.2', 'fe80::7aca:39ff:feb0:e67d', '78:ca:39:b0:e6:7d'
-});
 
 /* This is telling the server to listen to port 3001. */
 app.listen(PORT, () => {
