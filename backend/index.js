@@ -5,15 +5,21 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-require('dotenv').config();
+const MySQLStore = require('express-mysql-session')(session);
+var address = require('address');
+
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+	session({
+		secret: 'secret',
+		resave: true,
+		saveUninitialized: true
+	})
+);
 
 /* This is a middleware that is used to parse the body of the request. */
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
-
 app.use(
 	cors({
 		origin: [ 'http://localhost:3001' ],
@@ -22,23 +28,18 @@ app.use(
 	})
 );
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(
-	session({
-		key: 'userId',
-		secret: 'subscribe',
-		resave: false,
-		saveUninitialized: false,
-		cookie: {
-			expires: 60 * 60 * 24
-		}
-	})
-);
+app.use(express.json());
+app.use(express.static('static'));
+app.use(express.urlencoded({ extended: true }));
 
 // Routers
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
+
+address(function(err, addrs) {
+	console.log(addrs.ip, addrs.ipv6, addrs.mac);
+	// '192.168.0.2', 'fe80::7aca:39ff:feb0:e67d', '78:ca:39:b0:e6:7d'
+});
 
 /* This is telling the server to listen to port 3001. */
 app.listen(3001, () => {

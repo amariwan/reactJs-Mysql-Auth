@@ -4,15 +4,17 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from '../Pages/Login';
 import Dashboard from '../Pages/Dashboard';
 import Register from '../Pages/Register';
-import PageNotFound from '../Pages/PageNotFound.js';
+import PageNotFound from '../Pages/PageNotFound';
+import Test from '../Pages/test';
 
 const logado = localStorage.getItem('@user');
-
+console.log(logado);
 const Rotas = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
 				{logado && <Route path="/" exact element={<Dashboard />} />}
+				{logado && <Route path="/test" exact element={<Test />} />}
 				<Route path="*" element={<PageNotFound />} />
 				{!logado && <Route path="/" element={<Login logado={logado} />} />}
 				{!logado && <Route path="/Register" element={<Register logado={logado} />} />}

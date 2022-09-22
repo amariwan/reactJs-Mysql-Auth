@@ -4,6 +4,11 @@ const db = require('../database/index');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+router.get('/', (req, res) => {
+	console.log(req);
+	console.log('/');
+});
+
 /* This is a post request that is used to register a user. */
 router.post('/Register', (req, res) => {
 	/* This is getting the data from the request body. */
@@ -67,6 +72,7 @@ router.post('/Register', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
+	console.log(req.sessionID);
 	if (req.session.user) {
 		res.send({ loggedIn: true, user: req.session.user });
 	} else {
