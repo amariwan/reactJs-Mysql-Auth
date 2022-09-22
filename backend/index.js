@@ -2,7 +2,8 @@
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
+const bodyParser = require('body-parser')
+const cors = require('cors'); //  A middleware that is used to parse the body of the request.
 const app = express();
 const SERVERPORT = process.env.SERVERPORT;
 

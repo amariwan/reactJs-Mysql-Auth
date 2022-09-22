@@ -57,6 +57,7 @@ A table that shows the error codes and their respective messages.
 * [express-session](https://www.npmjs.com/package/express-session)
 * [cors](https://www.npmjs.com/package/cors)
 * [cookie-parser](https://www.npmjs.com/package/cookie-parser)
+* [body-parser](https://www.npmjs.com/package/body-parser)
 * [mysql](https://www.npmjs.com/package/mysql)
 * [nodemon](https://www.npmjs.com/package/nodemon)
 * [cors](https://www.npmjs.com/package/cors)
