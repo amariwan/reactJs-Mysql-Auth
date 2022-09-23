@@ -21,7 +21,7 @@ https://github.com/amariwan/reactJs-Mysql-Auth.git
 ```
 Run in terminal this command:
 ```bash
-cd backend && npm i 
+cd backend && npm i && cd ../Frontend/ && npm i 
 ```
 
 Change your mySQL database data .env
@@ -30,7 +30,7 @@ cp -r env .env
 ```
 Then run this command to start your local server
 ```bash
-npm rum dev 
+npm start 
 ```
 or
 ```bash
