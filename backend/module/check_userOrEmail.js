@@ -5,16 +5,16 @@
  */
 let isEmail = (email) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (re.test(email)) {
-        // this is a valid email address
-        // call setState({email: email}) to update the email
-        // or update the data in redux store.
-        return true;
-    } else {
-        // invalid email, maybe show an error to the user.
-        return false;
+    if (email != null) {
+        if (re.test(email)) {
+            // this is a valid email address
+            // call setState({email: email}) to update the email
+            // or update the data in redux store.
+            return true;
+        }
     }
+    // invalid email, maybe show an error to the user.
+    return false;
 };
 
 /**
@@ -24,15 +24,16 @@ let isEmail = (email) => {
  */
 let checkUsername = (username) => {
     let re = /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/;
-    if (re.test(username)) {
-        // this is a valid username
-        // call setState({username: username}) to update the username
-        // or update the data in redux store.
-        return true;
-    } else {
-        // invalid username, maybe show an error to the user.
-        return false;
+    if (username != null) {
+        if (re.test(username)) {
+            // this is a valid username
+            // call setState({username: username}) to update the username
+            // or update the data in redux store.
+            return true;
+        }
     }
+    // invalid username, maybe show an error to the user.
+    return false
 };
 
 module.exports = {
