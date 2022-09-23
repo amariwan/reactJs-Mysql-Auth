@@ -1,1 +1,51 @@
-{}
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "attach",
+        "name": "Node Nodemon",
+        "processId": "${command:PickProcess}",
+        "restart": true,
+        "protocol": "inspector"
+      }
+    ],
+    "editor.formatOnSave": true,
+    "debug.internalConsoleOptions": "neverOpen",
+    "docwriter.progress.trackClasses": true,
+    "docwriter.progress.trackTypes": true,
+    "docwriter.style": "JSDoc",
+    "vsicons.projectDetection.disableDetect": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "files.autoSave": "afterDelay",
+    "runOnSave.statusMessageTimeout": 3000,
+    "runOnSave.commands": [
+      {
+        "match": "\\.js$",
+        "command": "node ${file}"
+      }
+    ],
+    "emmet.includeLanguages": {
+      "markdown": "html"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[markdown]": {
+      "editor.defaultFormatter": "robole.marky-formatter"
+    },
+    "editor.formatOnSave": true,
+    "editor.detectIndentation": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "breadcrumbs.enabled": true,
+    "editor.minimap.renderCharacters": false,
+    "editor.minimap.maxColumn": 100,
+    "editor.minimap.showSlider": "always",
+    "editor.renderWhitespace": "all",
+    "editor.smoothScrolling": true,
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": true,
+
+  }

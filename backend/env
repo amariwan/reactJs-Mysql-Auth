@@ -1,7 +1,7 @@
-host            =   ""
-user            =   ""
-password        =   ""
-port            =   ""
-database        =   ""
-SERVERPORT      =   ""
-SESSION_SECRET  =   ""
+host            =   ""  // Host name for database connection.
+user            =   ""  // Database user.
+password        =   ""  // Password for the above database user.
+port            =   ""  // Port number for database connection.
+database        =   ""  // Database name.
+SERVERPORT      =   ""  // Server port
+SESSION_SECRET  =   ""  // Session secret
