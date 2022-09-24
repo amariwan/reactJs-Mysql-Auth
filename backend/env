@@ -5,3 +5,6 @@ port            =   ""  // Port number for database connection.
 database        =   ""  // Database name.
 SERVERPORT      =   ""  // Server port
 SESSION_SECRET  =   ""  // Session secret
+algorithm       =   ""  // Algorithm used to generate the encryption
+secretKey       =   ""  // Secret key for the above encryption 
+viByte          =   ""  // Encryption key for the above encryption
