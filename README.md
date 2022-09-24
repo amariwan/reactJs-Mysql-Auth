@@ -10,7 +10,7 @@
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
 	</a>
 	<img src="https://img.shields.io/github/checks-status/amariwan/reactJs-Mysql-Auth/master" alt="Build Status">
-	<a href="https://github.com/MichMich/MagicMirror">
+	<a href="https://github.com/amariwan/reactJs-Mysql-Auth">
 		<img src="https://img.shields.io/github/stars/amariwan/reactJs-Mysql-Auth?style=social">
 	</a>
 </p>
