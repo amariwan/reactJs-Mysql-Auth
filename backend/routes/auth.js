@@ -19,10 +19,9 @@ router.get('/', (req, res) => {
 /* This is a post request that is used to register a user. */
 router.post('/Register', (req, res) => {
 	/* This is getting the data from the request body. */
-	const username = req.body.username.toLowerCase();
-	const email = req.body.email.toLowerCase();
+	const username = decrypt(req.body.username).toLowerCase();
+	const email = decrypt(req.body.email).toLowerCase();
 	const password = req.body.password;
-
 
 	/* This is checking if the email is valid. */
 	if (!isEmail(email)) {

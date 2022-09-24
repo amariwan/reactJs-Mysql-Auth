@@ -92,8 +92,6 @@ app.use((err, req, res, next) => {
 	res.status(400).send(err.message)
 })
 
-app.use(myLogger)
-
 /* This is telling the server to listen to port 3001. */
 app.listen(SERVERPORT, (err) => {
 	if (err) {
