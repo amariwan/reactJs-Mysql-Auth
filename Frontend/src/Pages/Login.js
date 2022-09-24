@@ -5,20 +5,25 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import {encrypt,  decrypt } from '../module/crpyto' ;
+
 let notify = null;
 
 const Login = ({ logado = false }) => {
 	const [ isActive, setIsActive ] = useState(false);
 	const handleLogin = (values) => {
 		notify = toast.loading('Loading...');
+		var emailHash = encrypt(values.email);
+		var passwordHash = encrypt(values.password);
 		Axios.post('http://localhost:3001/auth/login', {
-			email: values.email,
-			password: values.password
+			email: emailHash,
+			password: passwordHash
 		}).then((response) => {
 			const page = response.data;
 			if (page === true) {
 				localStorage.setItem('@user', JSON.stringify(response.config.data));
 				window.location.reload();
+				console.log(response);
 			} else {
 				if (response.data.code === 100)
 					return toast(response.data.msg, { position: 'bottom-right', id: notify });
@@ -69,6 +74,7 @@ const Login = ({ logado = false }) => {
 		return false;
 	};
 
+	
 	return (
 		<section>
 			<div className="box">

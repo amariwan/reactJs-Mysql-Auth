@@ -5,16 +5,19 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import bcrypt from 'bcryptjs' // A library that is used to hash passwords.
+const saltRounds = 10; 
 
 const Register = ({ logado = false }) => {
 	const [ isActive, setIsActive ] = useState(false);
 
 	const handleRegister = (values) => {
 		// const notify = toast.loading('Loading...');
+		var password = bcrypt.hashSync(values.password, saltRounds) // hash created previously created upon sign up;
 		Axios.post('http://localhost:3001/auth/Register', {
 			username: values.username,
 			email: values.email,
-			password: values.password
+			password: password
 		}).then((response) => {
 			console.log(response);
 			if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right' });
