@@ -75,7 +75,6 @@ const Register = ({ logado = false }) => {
 				<div className="container">
 					<div className="form">
 						<h2>Register</h2>
-
 						<Formik initialValues={{}} onSubmit={handleRegister} validationSchema={validationsRegister}>
 							<Form className="login-form">
 								<div className="inputBx">

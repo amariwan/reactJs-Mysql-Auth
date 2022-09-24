@@ -19,10 +19,11 @@ const Login = ({ logado = false }) => {
 			email: emailHash,
 			password: passwordHash
 		}).then((response) => {
+			console.log(response);
 			const page = response.data;
 			if (page === true) {
-				localStorage.setItem('@user', JSON.stringify(response.config.data));
-				window.location.reload();
+				//localStorage.setItem('@user', JSON.stringify(response.config.data));
+				//window.location.reload();
 				console.log(response);
 			} else {
 				if (response.data.code === 100)

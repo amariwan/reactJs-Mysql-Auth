@@ -18,6 +18,7 @@
         "react-dom": "^18.2.0",
         "react-hot-toast": "^2.3.0",
         "react-icons": "^4.4.0",
+        "react-native-dotenv": "^3.3.1",
         "react-router-dom": "^6.3.0",
         "react-scripts": "^2.1.8",
         "react-toast": "^1.0.3",
@@ -46,6 +47,11 @@
             "last 1 chrome version",
             "last 1 firefox version",
             "last 1 safari version"
+        ]
+    },
+    "react-dotenv": {
+        "viByte": [
+            "API_URL"
         ]
     }
 }

@@ -17,20 +17,23 @@ const requestTime = function (req, res, next) {
 }
 
 app.use(requestTime)
+//session middleware
 app.use(
 	session({
 		/* This is a secret key that is used to encrypt the session. */
 		name: "session-id",
 		secret: SESSION_SECRET, // Secret key,
 		resave: false,
-		saveUninitialized: false,
+		saveUninitialized: true,
 		cookie: {
-			secure: true,
-			httpOnly: false, // This is a security feature that prevents the cookie from being accessed by JavaScript.
-			maxAge: 24 * 60 * 60 * 1000 // Setting the cookie to expire in 24 hours.
+			//secure: true,
+			//httpOnly: false, // This is a security feature that prevents the cookie from being accessed by JavaScript.
+			maxAge: 1000 * 60 * 60 * 24 // Setting the cookie to expire in 24 hours.
 		}
 	})
 );
+
+
 
 // app middleware
 app.use(express.json());
@@ -44,6 +47,7 @@ app.use(
 		// }
 	)
 );
+
 /*
  Use cookieParser and session middlewares together.
  By default Express/Connect app creates a cookie by name 'connect.sid'.But to scale Socket.io app,
@@ -51,12 +55,11 @@ app.use(
  W/o this, Socket.io won't work if you have more than 1 instance.
  If you are NOT running on Cloud Foundry, having cookie name 'jsessionid' doesn't hurt - it's just a cookie name.
  */
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(bodyParser.json())
-
+app.use(cookieParser());
 
 // app.all('*', (req, res, next) => {
 //   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -69,26 +72,27 @@ app.use(bodyParser.json())
 //   res.end()
 // });
 
-
-
 // Routers
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
+app.get('/set', function (req, res) {
+	req.session.user = {
+		name: 'Aland'
+	};
+	res.send('Session set');
+});
+
+app.get('/get', function (req, res) {
+	res.send(req.session.user);
+});
 
 // error handler
 app.use((err, req, res, next) => {
 	res.status(400).send(err.message)
 })
 
-const myLogger = function (req, res, next) {
-	console.log('LOGGED')
-	next()
-}
-
 app.use(myLogger)
-
-
 
 /* This is telling the server to listen to port 3001. */
 app.listen(SERVERPORT, (err) => {

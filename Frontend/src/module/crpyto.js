@@ -1,16 +1,12 @@
 const crypto = require('crypto');
-require('dotenv').config();
 /* The key used to encrypt and decrypt the data. */
-const viByte = process.env.viByte;
-const algorithm = process.env.algorithm;
-const secretKey = process.env.secretKey;
-
-
+const algorithm = 'aes-256-ctr';
+const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
 
 const encrypt = (text) => {
-
-  /* Creating a random 16 byte string. */
-  const iv = crypto.randomBytes(viByte);
+// do not use a global iv for production, 
+// generate a new one for each encryption
+  const iv = crypto.randomBytes(16);
 
 /* Creating a cipher object. */
   const cipher = crypto.createCipheriv(algorithm, secretKey, iv);

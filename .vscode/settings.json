@@ -47,5 +47,8 @@
     "editor.smoothScrolling": true,
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": true,
+    "[json]": {
+      "editor.defaultFormatter": "HookyQR.beautify"
+    },
 
   }

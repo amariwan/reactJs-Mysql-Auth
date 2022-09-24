@@ -141,7 +141,8 @@ router.post('/login', (req, res) => {
 					res.send(err);
 				}
 				if (response == true) {
-					res.send(response);
+					res.send(sid);
+					//res.send(response);
 				} else {
 					res.send({
 						msg: 'Email or password incorrect',
