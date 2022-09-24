@@ -50,7 +50,7 @@ COMMIT;
 
 CREATE TABLE `sessions_users` ( 
   `userId` varchar(255) DEFAULT NULL,
-  `session_id` varchar(128) COLLATE utf8mb4_bin NOT NULL primary key,
+  `session_id` varchar(255) COLLATE utf8mb4_bin NOT NULL primary key,
   `ip_address` varchar(255) DEFAULT NULL,
   `browser_id` varchar(255) DEFAULT NULL,
   `createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
