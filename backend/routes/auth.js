@@ -115,7 +115,11 @@ router.get('/login', (req, res) => {
 
 /* This is a post request that is used to login a user. */
 router.post('/login', (req, res) => {
-	var sid = req.sessionID;
+	  // Unless we explicitly write to the session (and resave is false), the
+  // store is never updated, even though a new session is generated on each
+  // request. After we modify that session and during req.end(), it gets
+  // persisted. On subsequent writes, it's updated and synced with the store.
+  req.session.userId = 1
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = decrypt(req.body.password);
 	var userOrEmail = 'username';
@@ -172,15 +176,40 @@ router.post('/login', (req, res) => {
 	});
 });
 
-router.get('/logout', function (req, res, next) {
-	res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-	req.session.destroy((err) => {
-		if (err) {
-			return console.log(err);
-		}
-		res.redirect('/');
-	});
-});
+app.post('/logout', (req, res) => {
+  // Assuming the request was authenticated in /login above,
+  /*
+    Session {
+      cookie: {
+        path: '/',
+        _expires: 2018-11-18T02:03:01.926Z,
+        originalMaxAge: 7200000,
+        httpOnly: true,
+        secure: false,
+        sameSite: true
+      },
+      userId: 1 <-- userId from /login
+    }
+  */
+  console.log(req.session)
+
+  console.log(req.session.id) // ex: 0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA
+
+  // Note that the portion between 's%3A' and '.' is the session ID above.
+  // 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
+  // sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
+  console.log(req.get('cookie'))
+
+  // Upon logout, we can destroy the session and unset req.session.
+  req.session.destroy(err => {
+    // We can also clear out the cookie here. But even if we don't, the
+    // session is already destroyed at this point, so either way, the
+    // user won't be able to authenticate with that same cookie again.
+    res.clearCookie('sid')
+
+    res.redirect('/')
+  })
+})
 
 /* This is exporting the router object. */
 module.exports = router;
