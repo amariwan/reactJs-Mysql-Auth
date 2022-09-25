@@ -21,13 +21,14 @@ app.use(requestTime)
 app.use(
 	session({
 		/* This is a secret key that is used to encrypt the session. */
-		name: "session-id",
+		name: "session_id",
 		secret: SESSION_SECRET, // Secret key,
 		resave: false,
 		saveUninitialized: true,
 		cookie: {
-			//secure: true,
-			//httpOnly: false, // This is a security feature that prevents the cookie from being accessed by JavaScript.
+			secure: false,
+			HostOnly:true,
+			HttpOnly:true, // This is a security feature that prevents the cookie from being accessed by JavaScript.
 			maxAge: 1000 * 60 * 60 * 24 // Setting the cookie to expire in 24 hours.
 		}
 	})
@@ -60,17 +61,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json())
 app.use(cookieParser());
-
-// app.all('*', (req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   // res.write(req.sessionID);
-//   // let responseText = 'Hello World!<br>'
-//   // responseText += `<small>Requested at: ${req.requestTime}</small>`
-//   // res.send(responseText)
-//   res.send(JSON.stringify(req.sessionID));
-//   res.end()
-// });
 
 // Routers
 const authRouter = require('./routes/auth');

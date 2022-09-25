@@ -9,13 +9,15 @@ const secretKey = process.env.secretKey;
 
 const encrypt = (text) => {
 
+  if (text === null && text.length === 0) return null;
+
   /* Creating a random 16 byte string. */
   const iv = crypto.randomBytes(viByte);
 
-/* Creating a cipher object. */
+  /* Creating a cipher object. */
   const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
-/* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
+  /* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
 
   return {
@@ -26,6 +28,7 @@ const encrypt = (text) => {
 
 const decrypt = (hash) => {
 
+  if (hash === null && hash.length === 0) return null;
   /* Creating a decipher object. */
   const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
 

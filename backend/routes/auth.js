@@ -2,8 +2,14 @@ const express = require('express');
 const router = express.Router(); // Creating a router object.
 const db = require('../database/index');
 const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
-const {encrypt,decrypt} = require('../module/crpyto');
-const {isEmail,checkUsername} = require('../module/check_userOrEmail');
+const {
+	encrypt,
+	decrypt
+} = require('../module/crpyto');
+const {
+	isEmail,
+	checkUsername
+} = require('../module/check_userOrEmail');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
 
@@ -17,12 +23,13 @@ router.get('/', (req, res) => {
 });
 
 /* This is a post request that is used to register a user. */
-router.post('/Register', (req, res) => {
+router.post('/register', (req, res) => {
 	/* This is getting the data from the request body. */
+	const name = decrypt(req.body.name).toLowerCase();
+	const lastname = decrypt(req.body.lastname).toLowerCase();
 	const username = decrypt(req.body.username).toLowerCase();
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = req.body.password;
-
 	/* This is checking if the email is valid. */
 	if (!isEmail(email)) {
 		res.send({
@@ -57,8 +64,8 @@ router.post('/Register', (req, res) => {
 				if (result.length == 0) {
 					/* This is inserting the data into the database. */
 					db.query(
-						'INSERT INTO users (username, email, password) VALUE (?,?,?)',
-						[username, email, password],
+						'INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)',
+						[name, lastname, username, email, password],
 						(error, response) => {
 							if (error) {
 								res.send({
@@ -140,6 +147,13 @@ router.post('/login', (req, res) => {
 					res.send(err);
 				}
 				if (response == true) {
+					// db.query(
+					// 	'INSERT INTO users (username, email, password, ) VALUE (?,?,?)',
+					// 	[username, email, password],
+					// 	(error, response) => {}
+					// );
+					sid.name = result[0].name;
+					sid.lastname = result[0].lastname;
 					res.send(sid);
 					//res.send(response);
 				} else {
