@@ -28,7 +28,7 @@ const encrypt = (text) => {
 
 const decrypt = (hash) => {
 
-  if (hash === null && hash.length === 0) return null;
+  if (hash === null && hash.length === 0 || typeof hash !== "object" ) return hash;
   /* Creating a decipher object. */
   const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
 

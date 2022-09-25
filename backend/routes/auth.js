@@ -119,12 +119,12 @@ router.post('/login', (req, res) => {
   // store is never updated, even though a new session is generated on each
   // request. After we modify that session and during req.end(), it gets
   // persisted. On subsequent writes, it's updated and synced with the store.
-  req.session.userId = 1
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = decrypt(req.body.password);
 	var userOrEmail = 'username';
-
+	
 	/* This is checking if the email or username. */
+	console.log(email, password);
 	if (isEmail(email)) {
 		userOrEmail = 'email';
 	} else {
@@ -136,7 +136,6 @@ router.post('/login', (req, res) => {
 			return;
 		}
 	}
-
 	/* This is checking if the user is registered. */
 	db.query('SELECT * FROM users WHERE ' + userOrEmail + ' = ?', [email], (err, result) => {
 		if (err) res.send(err);
@@ -151,13 +150,10 @@ router.post('/login', (req, res) => {
 					res.send(err);
 				}
 				if (response == true) {
-					// db.query(
-					// 	'INSERT INTO users (username, email, password, ) VALUE (?,?,?)',
-					// 	[username, email, password],
-					// 	(error, response) => {}
-					// );
-					sid.name = result[0].name;
-					sid.lastname = result[0].lastname;
+					req.session.name = result[0].name;
+					req.session.lastname = result[0].lastname;
+					req.session.userId = result[0].userID;
+					req.session.role = req.body.role;
 					res.send(sid);
 					//res.send(response);
 				} else {
@@ -176,7 +172,7 @@ router.post('/login', (req, res) => {
 	});
 });
 
-app.post('/logout', (req, res) => {
+router.post('/logout', (req, res) => {
   // Assuming the request was authenticated in /login above,
   /*
     Session {

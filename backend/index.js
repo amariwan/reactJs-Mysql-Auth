@@ -175,7 +175,10 @@ app.get('/set', function (req, res) {
 app.get('/get', function (req, res) {
 	res.send(req.session.user);
 });
-
+app.get('/det', function (req, res) {
+	req.session.destroy();
+	res.send(req.session.user);
+});
 // error handler
 app.use((err, req, res, next) => {
 	res.status(400).send(err.message)
