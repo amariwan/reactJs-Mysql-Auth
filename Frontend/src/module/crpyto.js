@@ -4,14 +4,17 @@ const algorithm = 'aes-256-ctr';
 const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
 
 const encrypt = (text) => {
-// do not use a global iv for production, 
-// generate a new one for each encryption
+
+  if (text === null && text.length === 0) return null;
+
+  // do not use a global iv for production, 
+  // generate a new one for each encryption
   const iv = crypto.randomBytes(16);
 
-/* Creating a cipher object. */
+  /* Creating a cipher object. */
   const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
-/* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
+  /* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
 
   return {
@@ -21,6 +24,8 @@ const encrypt = (text) => {
 };
 
 const decrypt = (hash) => {
+
+  if (hash === null && hash.length === 0) return null;
 
   /* Creating a decipher object. */
   const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));

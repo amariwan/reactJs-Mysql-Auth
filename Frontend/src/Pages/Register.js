@@ -14,10 +14,19 @@ const Register = ({ logado = false }) => {
 
 	const handleRegister = (values) => {
 		// const notify = toast.loading('Loading...');
-		var usernameHash = encrypt(values.usernames);
-		var emailHash = encrypt(values.email);
-		var passwordHash = bcrypt.hashSync(values.password, saltRounds) // hash created previously created upon sign up;
-		Axios.post('http://localhost:3001/auth/Register', {
+		var name = values.name;
+		var lastname = values.lastname;
+		var username = values.username;
+		var email = values.email;
+    var password = values.password;
+		var nameHash = encrypt(name);
+		var lastnameHash = encrypt(lastname);
+		var usernameHash = encrypt(username);
+		var emailHash = encrypt(email);
+		var passwordHash = bcrypt.hashSync(password, saltRounds) // hash created previously created upon sign up;
+		Axios.post('http://localhost:3001/auth/register', {
+			name: nameHash,
+			lastname: lastnameHash,
 			username: usernameHash,
 			email: emailHash,
 			password: passwordHash
@@ -77,6 +86,18 @@ const Register = ({ logado = false }) => {
 						<h2>Register</h2>
 						<Formik initialValues={{}} onSubmit={handleRegister} validationSchema={validationsRegister}>
 							<Form className="login-form">
+							<div className="inputBx">
+									<Field name="name" type="name" className="inputBox" />
+									<span className="spanInput">Name</span>
+									<i className="fas fa-user-circle" />
+									<ErrorMessage component="span" name="name" className="form-error" />
+								</div>								
+								<div className="inputBx">
+									<Field name="lastname" type="lastname" className="inputBox" />
+									<span className="spanInput">lastname</span>
+									<i className="fas fa-user-circle" />
+									<ErrorMessage component="span" name="lastname" className="form-error" />
+								</div>								
 								<div className="inputBx">
 									<Field name="username" type="username" className="inputBox" />
 									<span className="spanInput">username</span>
