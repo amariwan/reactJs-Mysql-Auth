@@ -3,7 +3,7 @@
  * @param email - The email address to validate.
  * @returns A function that takes an email as an argument and returns true or false.
  */
-let isEmail = (email) => {
+const isEmail = (email) => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (email != null) {
         if (re.test(email)) {
@@ -22,7 +22,7 @@ let isEmail = (email) => {
  * @param username - The username to check.
  * @returns A function that takes in a username and returns a boolean.
  */
-let checkUsername = (username) => {
+const checkUsername = (username) => {
     let re = /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/;
     if (username != null) {
         if (re.test(username)) {

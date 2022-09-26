@@ -19,8 +19,13 @@ const Login = ({ logado = false }) => {
 			email: emailHash,
 			password: passwordHash
 		}).then((response) => {
-			console.log(response);
+			if (response.data.user.username === values.email) {
+				
+				console.log(response.data.user.username);
+				console.log(response);
+			}
 			const page = response.data;
+			return;
 			if (page === true) {
 				//localStorage.setItem('@user', JSON.stringify(response.config.data));
 				//window.location.reload();
@@ -115,8 +120,8 @@ const Login = ({ logado = false }) => {
 								</div>
 							</Form>
 						</Formik>
-						<p>Forgot password? {!logado && <Link to="/Register">Click Here</Link>}</p>
-						<p>Don't have an account {!logado && <Link to="/Register">Sign up</Link>}</p>
+						<p>Forgot password? {!logado && <Link to="/register">Click Here</Link>}</p>
+						<p>Don't have an account {!logado && <Link to="/register">Sign up</Link>}</p>
 					</div>
 				</div>
 			</div>

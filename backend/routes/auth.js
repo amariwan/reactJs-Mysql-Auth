@@ -115,16 +115,15 @@ router.get('/login', (req, res) => {
 
 /* This is a post request that is used to login a user. */
 router.post('/login', (req, res) => {
-	  // Unless we explicitly write to the session (and resave is false), the
-  // store is never updated, even though a new session is generated on each
-  // request. After we modify that session and during req.end(), it gets
-  // persisted. On subsequent writes, it's updated and synced with the store.
+	// Unless we explicitly write to the session (and resave is false), the
+	// store is never updated, even though a new session is generated on each
+	// request. After we modify that session and during req.end(), it gets
+	// persisted. On subsequent writes, it's updated and synced with the store.
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = decrypt(req.body.password);
 	var userOrEmail = 'username';
-	
+
 	/* This is checking if the email or username. */
-	console.log(email, password);
 	if (isEmail(email)) {
 		userOrEmail = 'email';
 	} else {
@@ -141,7 +140,6 @@ router.post('/login', (req, res) => {
 		if (err) res.send(err);
 		if (result.length > 0) {
 			bcrypt.compare(password, result[0].password, (error, response) => {
-				console.log(response);
 				if (error) {
 					console.log('error :' + error);
 					res.send(error);
@@ -150,12 +148,14 @@ router.post('/login', (req, res) => {
 					res.send(err);
 				}
 				if (response == true) {
-					req.session.name = result[0].name;
-					req.session.lastname = result[0].lastname;
-					req.session.userId = result[0].userID;
-					req.session.role = req.body.role;
-					res.send(sid);
-					//res.send(response);
+					req.session.user = {
+						name: result[0].name,
+						lastname: result[0].lastname,
+						userID: result[0].userID,
+						username: email,
+						role: result[0].role
+					};
+					res.send(req.session);
 				} else {
 					res.send({
 						msg: 'Email or password incorrect',
@@ -173,38 +173,38 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  // Assuming the request was authenticated in /login above,
-  /*
-    Session {
-      cookie: {
-        path: '/',
-        _expires: 2018-11-18T02:03:01.926Z,
-        originalMaxAge: 7200000,
-        httpOnly: true,
-        secure: false,
-        sameSite: true
-      },
-      userId: 1 <-- userId from /login
-    }
-  */
-  console.log(req.session)
+	// Assuming the request was authenticated in /login above,
+	/*
+	  Session {
+	    cookie: {
+	      path: '/',
+	      _expires: 2018-11-18T02:03:01.926Z,
+	      originalMaxAge: 7200000,
+	      httpOnly: true,
+	      secure: false,
+	      sameSite: true
+	    },
+	    userId: 1 <-- userId from /login
+	  }
+	*/
+	console.log(req.session)
 
-  console.log(req.session.id) // ex: 0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA
+	console.log(req.session.id) // ex: 0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA
 
-  // Note that the portion between 's%3A' and '.' is the session ID above.
-  // 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
-  // sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
-  console.log(req.get('cookie'))
+	// Note that the portion between 's%3A' and '.' is the session ID above.
+	// 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
+	// sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
+	console.log(req.get('cookie'))
 
-  // Upon logout, we can destroy the session and unset req.session.
-  req.session.destroy(err => {
-    // We can also clear out the cookie here. But even if we don't, the
-    // session is already destroyed at this point, so either way, the
-    // user won't be able to authenticate with that same cookie again.
-    res.clearCookie('sid')
+	// Upon logout, we can destroy the session and unset req.session.
+	req.session.destroy(err => {
+		// We can also clear out the cookie here. But even if we don't, the
+		// session is already destroyed at this point, so either way, the
+		// user won't be able to authenticate with that same cookie again.
+		res.clearCookie('sid')
 
-    res.redirect('/')
-  })
+		res.redirect('/')
+	})
 })
 
 /* This is exporting the router object. */

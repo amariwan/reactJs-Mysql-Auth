@@ -17,7 +17,7 @@ const Rotas = () => {
 				{logado && <Route path="/test" exact element={<Test />} />}
 				<Route path="*" element={<PageNotFound />} />
 				{!logado && <Route path="/" element={<Login logado={logado} />} />}
-				{!logado && <Route path="/Register" element={<Register logado={logado} />} />}
+				{!logado && <Route path="/register" element={<Register logado={logado} />} />}
 			</Routes>
 		</BrowserRouter>
 	);
