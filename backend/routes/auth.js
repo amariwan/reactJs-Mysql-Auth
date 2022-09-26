@@ -6,10 +6,11 @@ const {
 	encrypt,
 	decrypt
 } = require('../module/crpyto');
-const {
-	isEmail,
-	checkUsername
-} = require('../module/check_userOrEmail');
+const {isEmail,checkUsername} = require('../module/check_userOrEmail');
+const {  getSessionOnDB,
+  setSessionOnDB,
+  compareSessionOnDB,
+  destroySessionOnDB} = require('../module/session');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
 
@@ -155,6 +156,7 @@ router.post('/login', (req, res) => {
 						username: email,
 						role: result[0].role
 					};
+					setSessionOnDB(req);
 					res.send(req.session);
 				} else {
 					res.send({
@@ -172,7 +174,13 @@ router.post('/login', (req, res) => {
 	});
 });
 
+router.get('/logout', (req, res) => {
+	destroySessionOnDB(req.sessionID);
+	console.log("logout completed");
+})
+
 router.post('/logout', (req, res) => {
+
 	// Assuming the request was authenticated in /login above,
 	/*
 	  Session {

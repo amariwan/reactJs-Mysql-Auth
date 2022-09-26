@@ -78,7 +78,8 @@ app.use(
 
 			// Preferred way to set Expires attribute. Time in milliseconds until
 			// the expiry. There's no default, so the cookie is non-persistent.
-			maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
+			// maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
+			maxAge: 5 * 60 * 1000, // Setting the cookie to expire in 24 hours.
 
 			// SameSite attribute in Set-Cookie header. Controls how cookies are sent
 			// with cross-site requests. Used to mitigate CSRF. Possible values are
@@ -98,6 +99,7 @@ app.use(
 
 
 // app middleware
+app.use(express.urlencoded({ extended : true }));
 app.use(express.json());
 /* This is a middleware that is used to parse the body of the request. */
 app.use(
@@ -162,33 +164,21 @@ app.get('/', (req, res) => {
 	// It's also the SESSION_ID portion in 's:{SESSION_ID}.{SIGNATURE}'.
 	console.log(req.sessionID)
 
-	res.send(`<a href='/login'>Login</a>`)
 })
 
-app.get('/set', function (req, res) {
+app.get('/set', (req, res) => {
 	req.session.user = {
 		name: 'Aland',
 		lastname: "Mariwan"
 	};
-
 	res.send('Session set');
 });
 
-app.post('/connect_user', (req, res) => {
-	req.session.cookie.username = req.body.username
-	findUserData('username', req.body.username, req, (userData) => {
-		req.session.cookie.id = userData.id
-		req.session.cookie.username = userData.username
-		res.redirect('/profil')
-	})
-})
-
-app.get('/get', function (req, res) {
+app.get('/get', (req, res) => {
 	res.send(req.session.user);
-	console.log(req.session.id) // ex:
-	console.log(req.session);
+	console.log(req.sessionStore.sessions);
 });
-app.get('/det', function (req, res) {
+app.get('/det', (req, res) => {
 	req.session.destroy();
 	res.send(req.session.user);
 });

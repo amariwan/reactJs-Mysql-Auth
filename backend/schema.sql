@@ -48,15 +48,18 @@ COMMIT;
 -- AUTO_INCREMENT for table `sessions_users`
 --
 
-CREATE TABLE `sessions_users` ( 
-  `userId` varchar(255) DEFAULT NULL,
-  `session_id` varchar(255) COLLATE utf8mb4_bin NOT NULL primary key,
-  `ip_address` varchar(255) DEFAULT NULL,
-  `browser_id` varchar(255) DEFAULT NULL,
-  `createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `LastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `session_users` ( 
+    ->   `userId` varchar(255) DEFAULT NULL,
+    ->   `session_id` varchar(255) COLLATE utf8mb4_bin NOT NULL primary key,
+    ->   `ip_address` varchar(255) DEFAULT NULL,
+    ->   `expires` int(11) unsigned NOT NULL,
+    ->   `data` mediumtext COLLATE utf8mb4_bin,
+    ->   `createdOn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ->   `LastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    -> ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+-- The Sec-CH-UA-Platform user agent client hint request header provides the platform or operating system on which the user agent is running. For example: "Windows" or "Android".
 
 -- CREATE TABLE IF NOT EXISTS `sessions` (
 --   `session_id` varchar(128) COLLATE utf8mb4_bin NOT NULL,
@@ -64,3 +67,4 @@ CREATE TABLE `sessions_users` (
 --   `data` mediumtext COLLATE utf8mb4_bin,
 --   PRIMARY KEY (`session_id`)
 -- ) ENGINE=InnoDB 
+
