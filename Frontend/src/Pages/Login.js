@@ -19,13 +19,12 @@ const Login = ({ logado = false }) => {
 			email: emailHash,
 			password: passwordHash
 		}).then((response) => {
+			console.log(response.data.user);
+			console.log(response);
+			return;
 			if (response.data.user.username === values.email) {
-				
-				console.log(response.data.user.username);
-				console.log(response);
 			}
 			const page = response.data;
-			return;
 			if (page === true) {
 				//localStorage.setItem('@user', JSON.stringify(response.config.data));
 				//window.location.reload();

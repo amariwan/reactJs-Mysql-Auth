@@ -3,9 +3,10 @@ import Axios from 'axios';
 
 const test = () => {
 	const handleLogin = () => {
-		Axios.get('http://localhost:3001/auth/login').then((response) => {
+		Axios.get('http://localhost:3001/auth/get').then((response) => {
+
 			console.log(response);
-		});
+		})
 	};
 	handleLogin();
 	return (

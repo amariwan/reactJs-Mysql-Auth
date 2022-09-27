@@ -1,12 +1,16 @@
 import React from "react";
 import "../../Styles/header.css"
-
+import Axios from 'axios';
 
 function Header() {
-
+    
     const logout = () => {
+        Axios.get('http://localhost:3001/auth/logout').then((response) => {
+            console.log(response);
+        
+        })
         localStorage.clear();
-        window.location.reload();
+        // window.location.reload();
     }
 
     return (

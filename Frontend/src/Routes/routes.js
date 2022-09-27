@@ -5,7 +5,8 @@ import Login from '../Pages/Login';
 import Dashboard from '../Pages/Dashboard';
 import Register from '../Pages/Register';
 import PageNotFound from '../Pages/PageNotFound';
-import Test from '../Pages/test';
+import Get from '../Pages/get';
+import Set from '../Pages/set';
 
 const logado = localStorage.getItem('@user');
 console.log(logado);
@@ -14,7 +15,8 @@ const Rotas = () => {
 		<BrowserRouter>
 			<Routes>
 				{logado && <Route path="/" exact element={<Dashboard />} />}
-				{logado && <Route path="/test" exact element={<Test />} />}
+				 <Route path="/get" exact element={<Get />}/>
+				 <Route path="/set" exact element={<Set />}/>
 				<Route path="*" element={<PageNotFound />} />
 				{!logado && <Route path="/" element={<Login logado={logado} />} />}
 				{!logado && <Route path="/register" element={<Register logado={logado} />} />}

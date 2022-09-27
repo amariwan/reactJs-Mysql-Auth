@@ -6,21 +6,35 @@ const {
 	encrypt,
 	decrypt
 } = require('../module/crpyto');
-const {isEmail,checkUsername} = require('../module/check_userOrEmail');
-const {  getSessionOnDB,
-  setSessionOnDB,
-  compareSessionOnDB,
-  destroySessionOnDB} = require('../module/session');
+const {
+	isEmail,
+	checkUsername
+} = require('../module/check_userOrEmail');
+const {
+	getSessionOnDB,
+	setSessionOnDB,
+	compareSessionOnDB,
+	destroySessionOnDB
+} = require('../module/session');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
 
-// test func
-router.get('/', (req, res) => {
-	res.send({
-		msg: 'Invalid email',
-		code: 101
-	});
-	console.log(req);
+
+router.get('/set', (req, res) => {
+	req.session.user = {
+		name: 'Aland',
+		lastname: "Mariwan"
+	};
+	res.send(req.session);
+});
+
+router.get('/get', (req, res) => {
+	res.send(req.session);
+	console.log(req.sessionStore.sessions);
+});
+router.get('/det', (req, res) => {
+	req.session.destroy();
+	res.send(req.session.user);
 });
 
 /* This is a post request that is used to register a user. */
@@ -149,15 +163,25 @@ router.post('/login', (req, res) => {
 					res.send(err);
 				}
 				if (response == true) {
-					req.session.user = {
-						name: result[0].name,
-						lastname: result[0].lastname,
-						userID: result[0].userID,
-						username: email,
-						role: result[0].role
-					};
-					setSessionOnDB(req);
-					res.send(req.session);
+					console.log(req.session);
+					if (req.session.user) {
+						res.send({
+							loggedIn: true,
+							user: req.session.user
+						});
+					} else {
+						req.session.user = {
+							name: result[0].name,
+							lastname: result[0].lastname,
+							userID: result[0].userID,
+							username: email,
+							role: result[0].role
+						};
+						// setSessionOnDB(req);
+						res.send(
+							req.session
+						);
+					}
 				} else {
 					res.send({
 						msg: 'Email or password incorrect',
@@ -175,8 +199,9 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-	destroySessionOnDB(req.sessionID);
-	console.log("logout completed");
+	var x = destroySessionOnDB(3);
+	console.log("logout completed", x);
+	res.send(x);
 })
 
 router.post('/logout', (req, res) => {
@@ -195,24 +220,27 @@ router.post('/logout', (req, res) => {
 	    userId: 1 <-- userId from /login
 	  }
 	*/
-	console.log(req.session)
+	// console.log(req.session)
 
-	console.log(req.session.id) // ex: 0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA
+	// console.log(req.session.id) // ex: 0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA
 
 	// Note that the portion between 's%3A' and '.' is the session ID above.
 	// 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
 	// sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
-	console.log(req.get('cookie'))
+	// console.log(req.get('cookie'))
 
 	// Upon logout, we can destroy the session and unset req.session.
-	req.session.destroy(err => {
-		// We can also clear out the cookie here. But even if we don't, the
-		// session is already destroyed at this point, so either way, the
-		// user won't be able to authenticate with that same cookie again.
-		res.clearCookie('sid')
+	// req.session.destroy(err => {
+	// We can also clear out the cookie here. But even if we don't, the
+	// session is already destroyed at this point, so either way, the
+	// user won't be able to authenticate with that same cookie again.
+	// res.clearCookie('session_id')
 
-		res.redirect('/')
-	})
+	// })
+	console.log(req.session.user.userID)
+	var x = destroySessionOnDB(req.session.user.userID);
+	console.log("logout completed", x);
+	res.send(x);
 })
 
 /* This is exporting the router object. */

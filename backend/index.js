@@ -78,20 +78,20 @@ app.use(
 
 			// Preferred way to set Expires attribute. Time in milliseconds until
 			// the expiry. There's no default, so the cookie is non-persistent.
-			// maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
-			maxAge: 5 * 60 * 1000, // Setting the cookie to expire in 24 hours.
+			maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
+			// maxAge: 5 * 60 * 1000, // Setting the cookie to expire in 24 hours.
 
 			// SameSite attribute in Set-Cookie header. Controls how cookies are sent
 			// with cross-site requests. Used to mitigate CSRF. Possible values are
 			// 'strict' (or true), 'lax', and false (to NOT set SameSite attribute).
 			// It only works in newer browsers, so CSRF prevention is still a concern.
-			sameSite: true,
+			// sameSite: true,
 
 			// Secure attribute in Set-Cookie header. Whether the cookie can ONLY be
 			// sent over HTTPS. Can be set to true, false, or 'auto'. Default is false.
-			secure: false,
-			HostOnly: true,
-			HttpOnly: true // This is a security feature that prevents the cookie from being accessed by JavaScript.
+			// secure: false,
+			// HostOnly: true,
+			// HttpOnly: true // This is a security feature that prevents the cookie from being accessed by JavaScript.
 		}
 	})
 );
@@ -99,7 +99,9 @@ app.use(
 
 
 // app middleware
-app.use(express.urlencoded({ extended : true }));
+app.use(express.urlencoded({
+	extended: true
+}));
 app.use(express.json());
 /* This is a middleware that is used to parse the body of the request. */
 app.use(
@@ -166,22 +168,6 @@ app.get('/', (req, res) => {
 
 })
 
-app.get('/set', (req, res) => {
-	req.session.user = {
-		name: 'Aland',
-		lastname: "Mariwan"
-	};
-	res.send('Session set');
-});
-
-app.get('/get', (req, res) => {
-	res.send(req.session.user);
-	console.log(req.sessionStore.sessions);
-});
-app.get('/det', (req, res) => {
-	req.session.destroy();
-	res.send(req.session.user);
-});
 // error handler
 app.use((err, req, res, next) => {
 	res.status(400).send(err.message)
