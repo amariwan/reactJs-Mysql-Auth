@@ -25,12 +25,14 @@ router.get('/set', (req, res) => {
 		name: 'Aland',
 		lastname: "Mariwan"
 	};
-	res.send(req.session);
+	res.send(req.sessionID);
+	console.log(req);
 });
 
 router.get('/get', (req, res) => {
-	res.send(req.session);
-	console.log(req.sessionStore.sessions);
+	res.send(req.sessionID);
+	// console.log(req.sessionStore.sessions);
+	// console.log(req);
 });
 router.get('/det', (req, res) => {
 	req.session.destroy();

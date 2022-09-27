@@ -1,4 +1,6 @@
 /* This is importing the modules that we need to use in our application. */
+const https = require("https");
+const fs = require("fs");
 const express = require('express');
 // Sessions can be stored server-side (ex: user auth) or client-side
 // (ex: shopping cart). express-session saves sessions in a store, and
@@ -12,7 +14,7 @@ require('dotenv').config();
 const SERVERPORT = process.env.SERVERPORT;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
-
+app.use(cors({ credentials: true, origin: true }));
 
 const requestTime = function (req, res, next) {
 	req.requestTime = Date.now()
@@ -33,7 +35,7 @@ app.use(
 		// makes no sense to save empty sessions for unauthenticated requests,
 		// because they are not associated with any valuable data yet, and would
 		// waste storage. We'll only save the new session once the user logs in.
-		saveUninitialized: true,
+		saveUninitialized: false,
 
 		// Whether to force-save the session back to the store, even if it wasn't
 		// modified during the request. Default is true (deprecated). We don't
@@ -99,9 +101,7 @@ app.use(
 
 
 // app middleware
-app.use(express.urlencoded({
-	extended: true
-}));
+app.use(express.urlencoded({ extended : true }));
 app.use(express.json());
 /* This is a middleware that is used to parse the body of the request. */
 app.use(
@@ -168,13 +168,39 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/set', (req, res) => {
+	req.session.user = {
+		name: 'Aland',
+		lastname: "Mariwan"
+	};
+	res.send(req.sessionID);
+});
+
+app.get('/get', (req, res) => {
+	res.send(req.sessionID);
+	console.log(req.sessionStore.sessions);
+});
+app.get('/det', (req, res) => {
+	req.session.destroy();
+	res.send(req.session.user);
+});
 // error handler
 app.use((err, req, res, next) => {
 	res.status(400).send(err.message)
 })
 
+
 /* This is telling the server to listen to port 3001. */
-app.listen(SERVERPORT, (err) => {
+https
+  .createServer(
+		// Provide the private and public key to the server by reading each
+		// file's content with the readFileSync() method.
+    {
+      key: fs.readFileSync("./https_key/key.pem"),
+      cert: fs.readFileSync("./https_key/cert.pem"),
+    },
+    app
+  ).listen(SERVERPORT, (err) => {
 	if (err) {
 		throw err;
 	} else {
