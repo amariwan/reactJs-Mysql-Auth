@@ -41,7 +41,7 @@
     "breadcrumbs.enabled": true,
     "editor.minimap.renderCharacters": false,
     "editor.minimap.maxColumn": 500,
-    "editor.fontSize": 14.5,
+    "editor.fontSize": 13.5,
     "editor.minimap.showSlider": "always",
     "editor.renderWhitespace": "all",
     "editor.smoothScrolling": true,
