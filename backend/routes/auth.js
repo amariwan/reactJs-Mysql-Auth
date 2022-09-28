@@ -21,11 +21,12 @@ const saltRounds = 10; // The number of rounds to use when generating a salt
 
 
 router.get('/set', (req, res) => {
+	var sessionId = cookieParser.signedCookie(cookie, secret);
 	req.session.user = {
 		name: 'Aland',
 		lastname: "Mariwan"
 	};
-	res.send(req.sessionID);
+	res.send(req.sessionId);
 	console.log(req);
 });
 

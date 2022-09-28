@@ -2,15 +2,13 @@ import React from 'react';
 import Axios from 'axios';
 
 const test = () => {
-	const handleLogin = () => {
-		Axios.get('http://localhost:3001/auth/set').then((response) => {
-			console.log(response);
+    Axios.get('https://localhost:4000/set').then((response) => {
+    console.log(response);
+			return response;
 		})
-	};
-	handleLogin();
 	return (
 		<div>
-			<h1>Hello</h1>
+			<h1>Aland</h1>
 		</div>
 	);
 };

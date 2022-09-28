@@ -24,7 +24,7 @@ const Register = ({ logado = false }) => {
 		var usernameHash = encrypt(username);
 		var emailHash = encrypt(email);
 		var passwordHash = bcrypt.hashSync(password, saltRounds) // hash created previously created upon sign up;
-		Axios.post('http://localhost:3001/auth/register', {
+		Axios.post('https://localhost:4000/auth/register', {
 			name: nameHash,
 			lastname: lastnameHash,
 			username: usernameHash,

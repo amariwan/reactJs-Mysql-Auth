@@ -32,6 +32,25 @@ Run in terminal this command:
 ```bash
 cd backend && npm i && cd ../Frontend/ && npm i 
 ```
+## Creating an SSL Certificate
+
+1. First, generate a key file used for self-signed certificate generation with the command below. The command will create a private key as a file called key.pem.
+  
+```bash
+openssl genrsa -out key.pem
+```
+
+2. Next, generate a certificate service request (CSR) with the command below. You’ll need a CSR to provide all of the input necessary to create the actual certificate.
+
+```bash
+openssl req -new -key key.pem -out csr.pem
+```
+<img src="img/openssl_1.png" alt="openssl_1">
+
+3. Finally, generate your certificate by providing the private key created to sign it with the public key created in step two with an expiry date of 9,999 days. This command below will create a certificate called cert.pem.
+```bash
+openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
+```
 
 Change your mySQL database data .env
 ```bash

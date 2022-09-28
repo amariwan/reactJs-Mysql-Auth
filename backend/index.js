@@ -21,7 +21,7 @@ const requestTime = function (req, res, next) {
 	next()
 }
 
-app.use(requestTime)
+app.use(requestTime);
 //session middleware
 app.use(
 	session({
@@ -35,7 +35,7 @@ app.use(
 		// makes no sense to save empty sessions for unauthenticated requests,
 		// because they are not associated with any valuable data yet, and would
 		// waste storage. We'll only save the new session once the user logs in.
-		saveUninitialized: false,
+		saveUninitialized: true,
 
 		// Whether to force-save the session back to the store, even if it wasn't
 		// modified during the request. Default is true (deprecated). We don't
@@ -104,15 +104,20 @@ app.use(
 app.use(express.urlencoded({ extended : true }));
 app.use(express.json());
 /* This is a middleware that is used to parse the body of the request. */
-app.use(
-	cors(
-		//   {
-		//   origin: ['http://localhost:3001'],
-		//   methods: ['GET', 'POST'],
-		//   credentials: true
-		// }
-	)
-);
+app.use(cors({
+	// origin:[process.env.ORIGIN],//frontend server localhost:8080
+	methods:['GET','POST','PUT','DELETE'],
+	credentials: true // enable set cookie
+ }));
+
+app.use(function(req, res, next) {
+
+	res.header('Access-Control-Allow-Credentials', true);
+	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+	// res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-   Type, Accept, Authorization");
+	next();
+	});
 
 /*
  Use cookieParser and session middlewares together.
@@ -121,11 +126,10 @@ app.use(
  W/o this, Socket.io won't work if you have more than 1 instance.
  If you are NOT running on Cloud Foundry, having cookie name 'jsessionid' doesn't hurt - it's just a cookie name.
  */
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
-app.use(bodyParser.json())
-app.use(cookieParser());
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser(SESSION_SECRET)); // any string ex: 'keyboard cat'
+
 
 // Routers
 const authRouter = require('./routes/auth');
@@ -167,6 +171,18 @@ app.get('/', (req, res) => {
 	console.log(req.sessionID)
 
 })
+
+
+app.get('/', function(req,res){
+	redis.get('sess:' + req.session.id, function(err, result){
+			console.log("Get session: " + util.inspect(JSON.parse(result),{ showHidden: true, depth: null }));
+	});
+	if ((req.session.user_role == "user")) {
+				console.log("Logged in");
+	} else {
+			console.log("Logged out");
+	}
+});
 
 app.get('/set', (req, res) => {
 	req.session.user = {
