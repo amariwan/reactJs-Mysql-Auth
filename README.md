@@ -3,17 +3,16 @@
 
 <h1 align="center">
   ReactJs Auth with MySQL API
-</h1>
-
-<p style="text-align: center">
-  <a href="https://choosealicense.com/licenses/mit">
+	<br>
+	  <a href="https://choosealicense.com/licenses/mit">
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
 	</a>
 	<img src="https://img.shields.io/github/checks-status/amariwan/reactJs-Mysql-Auth/master" alt="Build Status">
 	<a href="https://github.com/amariwan/reactJs-Mysql-Auth">
 		<img src="https://img.shields.io/github/stars/amariwan/reactJs-Mysql-Auth?style=social">
 	</a>
-</p>
+</h1>
+
 
 Before start, you need to have the following tools installed on computer: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/) and/or [Yarn](https://yarnpkg.com/). [MySQl::Workbench](https://www.mysql.com/products/workbench/).
 
