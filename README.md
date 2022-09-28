@@ -44,7 +44,7 @@ openssl genrsa -out key.pem
 ```bash
 openssl req -new -key key.pem -out csr.pem
 ```
-<img src="img/openssl_1.png" alt="openssl_1">
+<img src="./src/img/openssl_1.png" alt="openssl_1">
 
 3. Finally, generate your certificate by providing the private key created to sign it with the public key created in step two with an expiry date of 9,999 days. This command below will create a certificate called cert.pem.
 ```bash
