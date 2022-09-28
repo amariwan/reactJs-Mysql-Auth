@@ -98,7 +98,7 @@ npm start
 - consists of *name*, *value*, and (optional) *attributes* / *flags*
 - set with `Set-Cookie` by server, appended with `Cookie` by browser
 
-```
+```bash
 HTTP/1.1 200 OK
 Content-type: text/html
 Set-Cookie: SESS_ID=9vKnWqiZvuvVsIV1zmzJQeYUgINqXYeS; Domain=example.com; Path=/
@@ -163,7 +163,7 @@ Set-Cookie: SESS_ID=9vKnWqiZvuvVsIV1zmzJQeYUgINqXYeS; Domain=example.com; Path=/
 - *compact*, *self-contained*, *URL-safe* tokens
 - signed with *symmetric* (secret) or *asymmetric* (public/private) key
 
-```
+```bash
 HTTP/1.1 200 OK
 Content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YmQ2MWFhMWJiNDNmNzI0M2EyOTMxNmQiLCJuYW1lIjoiSm9obiBTbWl0aCIsImlhdCI6MTU0MTI3NjA2MH0.WDKey8WGO6LENkHWJRy8S0QOCbdGwFFoH5XCAR49g4k
@@ -171,7 +171,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YmQ2MWFhM
 
 - contains **header** (meta), **payload** (claims), and **signature** delimited by `.`
 
-```js
+```javascript
 atob('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9')
 // "{"alg":"HS256","typ":"JWT"}"
 //     ↑ algorithm   ↑ type
