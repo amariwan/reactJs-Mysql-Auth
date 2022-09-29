@@ -26,6 +26,10 @@ const Rotas = () => {
 };
 
 export default Rotas;
+
+
+
+
 // Soft UI Dashboard React layouts
 // import Dashboard from '../Pages/Dashboard';
 // import PageNotFound from '../Pages/PageNotFound.js';

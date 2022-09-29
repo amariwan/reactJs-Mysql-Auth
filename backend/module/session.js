@@ -36,7 +36,7 @@ const setSessionOnDB = (req) => {
   data = JSON.stringify(data);
   console.log("userID: " + userId, "session_id: " + session_id, "ip_address: " + ip_address, "expires: " + expires, "data: " + data);
   if (getSessionOnDB(userId) < 0) return;
-  db.query('UPDATE session_users (userId, session_id, ip_address, expires, data) VALUE (?,?,?,?,?)', [userId, session_id, ip_address, expires, data], (error, response) => {
+  db.query('UP session_users (userId, session_id, ip_address, expires, data) VALUE (?,?,?,?,?)', [userId, session_id, ip_address, expires, data], (error, response) => {
     if (error) return error;
     if (response.length > 0) return response;
   })

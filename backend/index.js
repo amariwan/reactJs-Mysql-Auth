@@ -14,14 +14,12 @@ require('dotenv').config();
 const SERVERPORT = process.env.SERVERPORT;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({
+	credentials: true,
+	origin: true 
+}));
 
-const requestTime = function (req, res, next) {
-	req.requestTime = Date.now()
-	next()
-}
 
-app.use(requestTime);
 //session middleware
 app.use(
 	session({
@@ -87,7 +85,7 @@ app.use(
 			// with cross-site requests. Used to mitigate CSRF. Possible values are
 			// 'strict' (or true), 'lax', and false (to NOT set SameSite attribute).
 			// It only works in newer browsers, so CSRF prevention is still a concern.
-			// sameSite: true,
+			sameSite: 'none'
 
 			// Secure attribute in Set-Cookie header. Whether the cookie can ONLY be
 			// sent over HTTPS. Can be set to true, false, or 'auto'. Default is false.
@@ -101,23 +99,17 @@ app.use(
 
 
 // app middleware
-app.use(express.urlencoded({ extended : true }));
+app.use(express.urlencoded({
+	extended: true
+}));
 app.use(express.json());
 /* This is a middleware that is used to parse the body of the request. */
 app.use(cors({
-	// origin:[process.env.ORIGIN],//frontend server localhost:8080
-	methods:['GET','POST','PUT','DELETE'],
+	origin:[process.env.ORIGIN_FRONTEND_SERVER], //frontend server localhost:8080
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
 	credentials: true // enable set cookie
- }));
+}));
 
-app.use(function(req, res, next) {
-
-	res.header('Access-Control-Allow-Credentials', true);
-	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
-	// res.header("Access-Control-Allow-Origin", process.env.ORIGIN);
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-   Type, Accept, Authorization");
-	next();
-	});
 
 /*
  Use cookieParser and session middlewares together.
@@ -126,8 +118,10 @@ app.use(function(req, res, next) {
  W/o this, Socket.io won't work if you have more than 1 instance.
  If you are NOT running on Cloud Foundry, having cookie name 'jsessionid' doesn't hurt - it's just a cookie name.
  */
- app.use(bodyParser.json());
- app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 app.use(cookieParser(SESSION_SECRET)); // any string ex: 'keyboard cat'
 
 
@@ -173,53 +167,20 @@ app.get('/', (req, res) => {
 })
 
 
-app.get('/', function(req,res){
-	redis.get('sess:' + req.session.id, function(err, result){
-			console.log("Get session: " + util.inspect(JSON.parse(result),{ showHidden: true, depth: null }));
-	});
-	if ((req.session.user_role == "user")) {
-				console.log("Logged in");
-	} else {
-			console.log("Logged out");
-	}
-});
-
-app.get('/set', (req, res) => {
-	req.session.user = {
-		name: 'Aland',
-		lastname: "Mariwan"
-	};
-	res.send(req.sessionID);
-});
-
-app.get('/get', (req, res) => {
-	res.send(req.sessionID);
-	console.log(req.sessionStore.sessions);
-});
-app.get('/det', (req, res) => {
-	req.session.destroy();
-	res.send(req.session.user);
-});
-// error handler
-app.use((err, req, res, next) => {
-	res.status(400).send(err.message)
-})
-
-
 /* This is telling the server to listen to port 3001. */
 https
-  .createServer(
+	.createServer(
 		// Provide the private and public key to the server by reading each
 		// file's content with the readFileSync() method.
-    {
-      key: fs.readFileSync("./https_key/key.pem"),
-      cert: fs.readFileSync("./https_key/cert.pem"),
-    },
-    app
-  ).listen(SERVERPORT, (err) => {
-	if (err) {
-		throw err;
-	} else {
-		console.log('🚀 Server running in the', SERVERPORT);
-	}
-});
+		{
+			key: fs.readFileSync(process.env.privateKey),
+			cert: fs.readFileSync(process.env.certificate),
+		},
+		app
+	).listen(SERVERPORT, (err) => {
+		if (err) {
+			throw err;
+		} else {
+			console.log('🚀 Server running in the', SERVERPORT);
+		}
+	});

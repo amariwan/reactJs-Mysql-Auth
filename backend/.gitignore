@@ -11,6 +11,8 @@
 
 /https_key
 
+/test 
+
 # misc
 .DS_Store
 .env.local

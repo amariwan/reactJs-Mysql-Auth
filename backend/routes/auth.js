@@ -2,20 +2,9 @@ const express = require('express');
 const router = express.Router(); // Creating a router object.
 const db = require('../database/index');
 const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
-const {
-	encrypt,
-	decrypt
-} = require('../module/crpyto');
-const {
-	isEmail,
-	checkUsername
-} = require('../module/check_userOrEmail');
-const {
-	getSessionOnDB,
-	setSessionOnDB,
-	compareSessionOnDB,
-	destroySessionOnDB
-} = require('../module/session');
+const {encrypt,decrypt} = require('../module/crpyto');
+const {isEmail,checkUsername} = require('../module/check_userOrEmail');
+const {getSessionOnDB,setSessionOnDB,compareSessionOnDB,destroySessionOnDB} = require('../module/session');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
 
