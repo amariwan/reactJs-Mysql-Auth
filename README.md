@@ -55,6 +55,21 @@ Change your mySQL database data .env
 ```bash
 cp -r env .env
 ```
+info about .env variable
+
+```env
+host            =   ""  // Host name for database connection. //! localhost
+user            =   ""  // Database user. //! root
+password        =   ""  // Password for the above database user. 
+port            =   ""  // Port number for database connection. //! 3306
+database        =   ""  // Database name. //! auth_db
+SERVERPORT      =   ""  // Server port //! 4000
+SESSION_SECRET  =   ""  // Session secret //! Harley Davidson
+algorithm       =   ""  // Algorithm used to generate the encryption //! aes-256-ctr
+secretKey       =   ""  // Secret key for the above encryption  //! vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
+viByte          =   ""  // Encryption key for the above encryption //! 16
+OriginFrontendServer = "" //frontend server //! localhost:8080
+```
 Then run this command to start your local server
 ```bash
 npm start 
