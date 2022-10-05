@@ -4,40 +4,38 @@ const algorithm = 'aes-256-ctr';
 const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
 
 const encrypt = (text) => {
+	if (text === null && text.length === 0) return null;
 
-  if (text === null && text.length === 0) return null;
+	// do not use a global iv for production,
+	// generate a new one for each encryption
+	const iv = crypto.randomBytes(16);
 
-  // do not use a global iv for production, 
-  // generate a new one for each encryption
-  const iv = crypto.randomBytes(16);
+	/* Creating a cipher object. */
+	const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
-  /* Creating a cipher object. */
-  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+	/* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
+	const encrypted = Buffer.concat([ cipher.update(text), cipher.final() ]);
 
-  /* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
-  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-
-  return {
-    iv: iv.toString('hex'),
-    content: encrypted.toString('hex')
-  };
+	return {
+		iv: iv.toString('hex'),
+		content: encrypted.toString('hex'),
+	};
 };
 
 const decrypt = (hash) => {
+	if ((hash === null && hash.length === 0) || typeof hash !== 'object') return hash;
 
-  if (hash === null && hash.length === 0 || typeof hash !== "object" ) return hash;
+	/* Creating a decipher object. */
+	const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
 
-  /* Creating a decipher object. */
-  const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
+	/* Decrypting the content. */
+	const decrpyted = Buffer.concat([ decipher.update(Buffer.from(hash.content, 'hex')), decipher.final() ]);
 
-  /* Decrypting the content. */
-  const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
-
-  /* Returning the decrypted string. */
-  return decrpyted.toString();
+	/* Returning the decrypted string. */
+	return decrpyted.toString();
 };
 
 module.exports = {
-  encrypt,
-  decrypt
+	encrypt,
+	decrypt,
 };

@@ -1,24 +1,25 @@
 /* This is importing the modules that we need to use in our application. */
-const https = require("https");
-const fs = require("fs");
-const express = require('express');
+const https = require('https')
+const fs = require('fs')
+const express = require('express')
 // Sessions can be stored server-side (ex: user auth) or client-side
 // (ex: shopping cart). express-session saves sessions in a store, and
 // NOT in a cookie. To store sessions in a cookie, use cookie-session.
 const session = require('express-session')
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const cors = require('cors'); //  A middleware that is used to parse the body of the request.
-const app = express();
-require('dotenv').config();
-const SERVERPORT = process.env.SERVERPORT;
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const cors = require('cors') //  A middleware that is used to parse the body of the request.
+const app = express()
+require('dotenv').config()
+const SERVERPORT = process.env.SERVERPORT
+const SESSION_SECRET = process.env.SESSION_SECRET
 
-app.use(cors({
-	credentials: true,
-	origin: true 
-}));
-
+app.use(
+	cors({
+		credentials: true,
+		origin: true,
+	}),
+)
 
 //session middleware
 app.use(
@@ -26,7 +27,7 @@ app.use(
 		/* This is a secret key that is used to encrypt the session. */
 
 		// Name for the session ID cookie. Defaults to 'connect.sid'.
-		name: "session_id",
+		name: 'session_id',
 
 		// Whether to force-save unitialized (new, but not modified) sessions
 		// to the store. Defaults to true (deprecated). For login sessions, it
@@ -85,31 +86,32 @@ app.use(
 			// with cross-site requests. Used to mitigate CSRF. Possible values are
 			// 'strict' (or true), 'lax', and false (to NOT set SameSite attribute).
 			// It only works in newer browsers, so CSRF prevention is still a concern.
-			sameSite: 'none'
+			sameSite: 'none',
 
 			// Secure attribute in Set-Cookie header. Whether the cookie can ONLY be
 			// sent over HTTPS. Can be set to true, false, or 'auto'. Default is false.
 			// secure: false,
 			// HostOnly: true,
 			// HttpOnly: true // This is a security feature that prevents the cookie from being accessed by JavaScript.
-		}
-	})
-);
-
-
+		},
+	}),
+)
 
 // app middleware
-app.use(express.urlencoded({
-	extended: true
-}));
-app.use(express.json());
+app.use(
+	express.urlencoded({
+		extended: true,
+	}),
+)
+app.use(express.json())
 /* This is a middleware that is used to parse the body of the request. */
-app.use(cors({
-	origin:[process.env.ORIGIN_FRONTEND_SERVER], //frontend server localhost:8080
-	methods: ['GET', 'POST', 'PUT', 'DELETE'],
-	credentials: true // enable set cookie
-}));
-
+app.use(
+	cors({
+		origin: [ process.env.ORIGIN_FRONTEND_SERVER ], //frontend server localhost:8080
+		methods: [ 'GET', 'POST', 'PUT', 'DELETE' ],
+		credentials: true, // enable set cookie
+	}),
+)
 
 /*
  Use cookieParser and session middlewares together.
@@ -118,16 +120,20 @@ app.use(cors({
  W/o this, Socket.io won't work if you have more than 1 instance.
  If you are NOT running on Cloud Foundry, having cookie name 'jsessionid' doesn't hurt - it's just a cookie name.
  */
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
-app.use(cookieParser(SESSION_SECRET)); // any string ex: 'keyboard cat'
-
+app.use(bodyParser.json())
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+	}),
+)
+app.use(cookieParser(SESSION_SECRET)) // any string ex: 'keyboard cat'
 
 // Routers
-const authRouter = require('./routes/auth');
-app.use('/auth', authRouter);
+const authRouter = require('./routes/auth')
+app.use('/auth', authRouter)
+
+const test1Router = require('./test/test_1')
+app.use('/test', test1Router)
 
 app.get('/', (req, res) => {
 	// A new uninitialized session is created for each request (but not
@@ -163,9 +169,7 @@ app.get('/', (req, res) => {
 	// Same as above. Alphanumeric ID that gets written to the cookie.
 	// It's also the SESSION_ID portion in 's:{SESSION_ID}.{SIGNATURE}'.
 	console.log(req.sessionID)
-
 })
-
 
 /* This is telling the server to listen to port 3001. */
 https
@@ -176,11 +180,12 @@ https
 			key: fs.readFileSync(process.env.privateKey),
 			cert: fs.readFileSync(process.env.certificate),
 		},
-		app
-	).listen(SERVERPORT, (err) => {
+		app,
+	)
+	.listen(SERVERPORT, (err) => {
 		if (err) {
-			throw err;
+			throw err
 		} else {
-			console.log('🚀 Server running in the', SERVERPORT);
+			console.log('🚀 Server running in the', SERVERPORT)
 		}
-	});
+	})

@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import {encrypt,  decrypt } from '../module/crpyto' ;
+import { encrypt, decrypt } from '../module/crpyto';
 
 let notify = null;
 
@@ -17,7 +17,7 @@ const Login = ({ logado = false }) => {
 		var passwordHash = encrypt(values.password);
 		Axios.post('https://localhost:4000/auth/login', {
 			email: emailHash,
-			password: passwordHash
+			password: passwordHash,
 		}).then((response) => {
 			console.log(response.data.user);
 			console.log(response);
@@ -30,40 +30,25 @@ const Login = ({ logado = false }) => {
 				//window.location.reload();
 				console.log(response);
 			} else {
-				if (response.data.code === 100)
-					return toast(response.data.msg, { position: 'bottom-right', id: notify });
-				if (response.data.code === 101)
-					return toast(response.data.msg, { position: 'bottom-right', id: notify });
-				if (response.data.code === 102)
-					return toast(response.data.msg, { position: 'bottom-right', id: notify });
-				if (response.data.code === 103)
-					return toast(response.data.msg, { position: 'bottom-right', id: notify });
-				if (response.data.code === 104)
-					return toast(response.data.msg, { position: 'bottom-right', id: notify });
-				if (response.data.code === 105)
-					return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 101) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 102) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 103) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 104) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 105) return toast(response.data.msg, { position: 'bottom-right', id: notify });
 			}
 		});
 	};
 
 	const validationsLogin = yup.object().shape({
 		email: yup.string().min(5, 'invalid email').required('Email is required'),
-		password: yup
-			.string()
-			.min(8, 'The password must be at least 8 characters long')
-			.required('The password is required')
+		password: yup.string().min(8, 'The password must be at least 8 characters long').required('The password is required'),
 	});
 
 	const validationsRegister = yup.object().shape({
 		email: yup.string().min(8, 'invalid email').required('Email is required'),
-		password: yup
-			.string()
-			.min(8, 'The password must be at least 8 characters long')
-			.required('The password is required'),
-		confirmation: yup
-			.string()
-			.oneOf([ yup.ref('password'), null ], 'Passwords are different')
-			.required('Password confirmation is mandatory')
+		password: yup.string().min(8, 'The password must be at least 8 characters long').required('The password is required'),
+		confirmation: yup.string().oneOf([ yup.ref('password'), null ], 'Passwords are different').required('Password confirmation is mandatory'),
 	});
 
 	const show_hide_password = (target) => {
@@ -79,7 +64,6 @@ const Login = ({ logado = false }) => {
 		return false;
 	};
 
-	
 	return (
 		<section>
 			<div className="box">
@@ -103,11 +87,7 @@ const Login = ({ logado = false }) => {
 								<div className="inputBx password">
 									<Field name="password" type="password" className="inputBox" id="password-input" />
 									<span className="spanInput">password</span>
-									<a
-										href="#"
-										className={isActive ? 'password-control view' : 'password-control'}
-										onClick={(event) => show_hide_password(event, 100)}
-									/>
+									<a href="#" className={isActive ? 'password-control view' : 'password-control'} onClick={(event) => show_hide_password(event, 100)} />
 									<i className="fas fa-key" />
 									<ErrorMessage component="span" name="password" className="form-error" />
 								</div>

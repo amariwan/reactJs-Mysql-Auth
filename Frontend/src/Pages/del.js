@@ -12,7 +12,7 @@ const test = () => {
 	// 	return response;
 	// })
 
-	Axios('https://localhost:4000/test/set', {
+	Axios('https://localhost:4000/test/del', {
 		method: 'GET',
 		withCredentials: true,
 	});

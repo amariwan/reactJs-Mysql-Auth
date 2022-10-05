@@ -50,5 +50,12 @@
     "[json]": {
       "editor.defaultFormatter": "HookyQR.beautify"
     },
-
+    "[javascript]": {
+      "editor.defaultFormatter": "remimarsal.prettier-now"
+    },
+    "prettier.printWidth": 300,
+    "prettier.tabWidth": 6,
+    "prettier.semi": true,
+    "prettier.singleQuote": true,
+    "prettier.trailingComma": "all"
   }

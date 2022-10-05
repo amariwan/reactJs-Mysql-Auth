@@ -5,9 +5,9 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import {encrypt,  decrypt } from '../module/crpyto' ;
-import bcrypt from 'bcryptjs' // A library that is used to hash passwords.
-const saltRounds = 10; 
+import { encrypt, decrypt } from '../module/crpyto';
+import bcrypt from 'bcryptjs'; // A library that is used to hash passwords.
+const saltRounds = 10;
 
 const Register = ({ logado = false }) => {
 	const [ isActive, setIsActive ] = useState(false);
@@ -18,18 +18,18 @@ const Register = ({ logado = false }) => {
 		var lastname = values.lastname;
 		var username = values.username;
 		var email = values.email;
-    var password = values.password;
+		var password = values.password;
 		var nameHash = encrypt(name);
 		var lastnameHash = encrypt(lastname);
 		var usernameHash = encrypt(username);
 		var emailHash = encrypt(email);
-		var passwordHash = bcrypt.hashSync(password, saltRounds) // hash created previously created upon sign up;
+		var passwordHash = bcrypt.hashSync(password, saltRounds); // hash created previously created upon sign up;
 		Axios.post('https://localhost:4000/auth/register', {
 			name: nameHash,
 			lastname: lastnameHash,
 			username: usernameHash,
 			email: emailHash,
-			password: passwordHash
+			password: passwordHash,
 		}).then((response) => {
 			console.log(response);
 			if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right' });
@@ -47,14 +47,8 @@ const Register = ({ logado = false }) => {
 	const validationsRegister = yup.object().shape({
 		email: yup.string().email('Invalid email').required('Email is required'),
 		username: yup.string().min(8, 'Invalid username').required('username is required'),
-		password: yup
-			.string()
-			.min(8, 'The password must be at least 8 characters long')
-			.required('The password is mandatory'),
-		confirmation: yup
-			.string()
-			.oneOf([ yup.ref('password'), null ], 'Passwords are different')
-			.required('Password confirmation is required')
+		password: yup.string().min(8, 'The password must be at least 8 characters long').required('The password is mandatory'),
+		confirmation: yup.string().oneOf([ yup.ref('password'), null ], 'Passwords are different').required('Password confirmation is required'),
 	});
 
 	const show_hide_password = (target) => {
@@ -86,18 +80,18 @@ const Register = ({ logado = false }) => {
 						<h2>Register</h2>
 						<Formik initialValues={{}} onSubmit={handleRegister} validationSchema={validationsRegister}>
 							<Form className="login-form">
-							<div className="inputBx">
+								<div className="inputBx">
 									<Field name="name" type="name" className="inputBox" />
 									<span className="spanInput">Name</span>
 									<i className="fas fa-user-circle" />
 									<ErrorMessage component="span" name="name" className="form-error" />
-								</div>								
+								</div>
 								<div className="inputBx">
 									<Field name="lastname" type="lastname" className="inputBox" />
 									<span className="spanInput">lastname</span>
 									<i className="fas fa-user-circle" />
 									<ErrorMessage component="span" name="lastname" className="form-error" />
-								</div>								
+								</div>
 								<div className="inputBx">
 									<Field name="username" type="username" className="inputBox" />
 									<span className="spanInput">username</span>
@@ -115,21 +109,12 @@ const Register = ({ logado = false }) => {
 									<span className="spanInput" form="email">
 										password
 									</span>
-									<a
-										href="#"
-										className={isActive ? 'password-control view' : 'password-control'}
-										onClick={(event) => show_hide_password(event, 100)}
-									/>
+									<a href="#" className={isActive ? 'password-control view' : 'password-control'} onClick={(event) => show_hide_password(event, 100)} />
 									<i className="fas fa-key" />
 									<ErrorMessage component="span" name="password" className="form-error" />
 								</div>
 								<div className="inputBx password">
-									<Field
-										name="confirmation"
-										type="password"
-										className="inputBox"
-										id="password-input"
-									/>
+									<Field name="confirmation" type="password" className="inputBox" id="password-input" />
 									<span className="spanInput">password</span>
 									<i className="fas fa-key" />
 									<ErrorMessage component="span" name="confirmation" className="form-error" />
