@@ -2,18 +2,17 @@ const express = require('express');
 const router = express.Router(); // Creating a router object.
 const db = require('../database/index');
 const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
-const {encrypt,decrypt} = require('../module/crpyto');
-const {isEmail,checkUsername} = require('../module/check_userOrEmail');
-const {getSessionOnDB,setSessionOnDB,compareSessionOnDB,destroySessionOnDB} = require('../module/session');
+const { encrypt, decrypt } = require('../module/crpyto');
+const { isEmail, checkUsername } = require('../module/check_userOrEmail');
+const { getSessionOnDB, setSessionOnDB, compareSessionOnDB, destroySessionOnDB } = require('../module/session');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
-
 
 router.get('/set', (req, res) => {
 	var sessionId = cookieParser.signedCookie(cookie, secret);
 	req.session.user = {
 		name: 'Aland',
-		lastname: "Mariwan"
+		lastname: 'Mariwan',
 	};
 	res.send(req.sessionId);
 	console.log(req);
@@ -41,7 +40,7 @@ router.post('/register', (req, res) => {
 	if (!isEmail(email)) {
 		res.send({
 			msg: 'Invalid email',
-			code: 101
+			code: 101,
 		});
 		return;
 	}
@@ -50,7 +49,7 @@ router.post('/register', (req, res) => {
 	if (!checkUsername(username)) {
 		res.send({
 			msg: 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
-			code: 102
+			code: 102,
 		});
 		return;
 	}
@@ -58,49 +57,45 @@ router.post('/register', (req, res) => {
 	/* This is checking if the password is at least 8 characters long. */
 	if (password.length < 8)
 		return res.send({
-			msg: 'Password must be at least 8 characters long.'
+			msg: 'Password must be at least 8 characters long.',
 		});
 
 	/* This is checking if the username is already registered. */
-	db.query('SELECT * FROM users WHERE username = ?', [username], function (err, result) {
+	db.query('SELECT * FROM users WHERE username = ?', [ username ], function(err, result) {
 		if (err) throw err;
 		if (result.length == 0) {
 			/* This is checking if the Email is already registered. */
-			db.query('SELECT * FROM users WHERE email = ?', [email], function (err, result) {
+			db.query('SELECT * FROM users WHERE email = ?', [ email ], function(err, result) {
 				if (err) throw err;
 				if (result.length == 0) {
 					/* This is inserting the data into the database. */
-					db.query(
-						'INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)',
-						[name, lastname, username, email, password],
-						(error, response) => {
-							if (error) {
-								res.send({
-									msg: error
-								});
-							} else if (err) {
-								res.send({
-									msg: err
-								});
-							} else {
-								res.send({
-									msg: 'User successfully registered',
-									code: 201
-								});
-							}
+					db.query('INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)', [ name, lastname, username, email, password ], (error, response) => {
+						if (error) {
+							res.send({
+								msg: error,
+							});
+						} else if (err) {
+							res.send({
+								msg: err,
+							});
+						} else {
+							res.send({
+								msg: 'User successfully registered',
+								code: 201,
+							});
 						}
-					);
+					});
 				} else {
 					res.send({
 						msg: 'Email already registered',
-						code: 100
+						code: 100,
 					});
 				}
 			});
 		} else {
 			res.send({
 				msg: 'username already registered',
-				code: 100
+				code: 100,
 			});
 		}
 	});
@@ -111,11 +106,11 @@ router.get('/login', (req, res) => {
 	if (req.session.user) {
 		res.send({
 			loggedIn: true,
-			user: req.session.user
+			user: req.session.user,
 		});
 	} else {
 		res.send({
-			loggedIn: false
+			loggedIn: false,
 		});
 	}
 });
@@ -137,13 +132,13 @@ router.post('/login', (req, res) => {
 		if (!checkUsername(email)) {
 			res.send({
 				msg: 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
-				code: 102
+				code: 102,
 			});
 			return;
 		}
 	}
 	/* This is checking if the user is registered. */
-	db.query('SELECT * FROM users WHERE ' + userOrEmail + ' = ?', [email], (err, result) => {
+	db.query('SELECT * FROM users WHERE ' + userOrEmail + ' = ?', [ email ], (err, result) => {
 		if (err) res.send(err);
 		if (result.length > 0) {
 			bcrypt.compare(password, result[0].password, (error, response) => {
@@ -159,7 +154,7 @@ router.post('/login', (req, res) => {
 					if (req.session.user) {
 						res.send({
 							loggedIn: true,
-							user: req.session.user
+							user: req.session.user,
 						});
 					} else {
 						req.session.user = {
@@ -167,24 +162,22 @@ router.post('/login', (req, res) => {
 							lastname: result[0].lastname,
 							userID: result[0].userID,
 							username: email,
-							role: result[0].role
+							role: result[0].role,
 						};
 						// setSessionOnDB(req);
-						res.send(
-							req.session
-						);
+						res.send(req.session);
 					}
 				} else {
 					res.send({
 						msg: 'Email or password incorrect',
-						code: 105
+						code: 105,
 					});
 				}
 			});
 		} else {
 			res.send({
 				msg: 'Not registered user!',
-				code: 104
+				code: 104,
 			});
 		}
 	});
@@ -192,12 +185,11 @@ router.post('/login', (req, res) => {
 
 router.get('/logout', (req, res) => {
 	var x = destroySessionOnDB(3);
-	console.log("logout completed", x);
+	console.log('logout completed', x);
 	res.send(x);
-})
+});
 
 router.post('/logout', (req, res) => {
-
 	// Assuming the request was authenticated in /login above,
 	/*
 	  Session {
@@ -229,11 +221,11 @@ router.post('/logout', (req, res) => {
 	// res.clearCookie('session_id')
 
 	// })
-	console.log(req.session.user.userID)
+	console.log(req.session.user.userID);
 	var x = destroySessionOnDB(req.session.user.userID);
-	console.log("logout completed", x);
+	console.log('logout completed', x);
 	res.send(x);
-})
+});
 
 /* This is exporting the router object. */
 module.exports = router;
