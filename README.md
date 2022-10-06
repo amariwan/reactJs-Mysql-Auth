@@ -13,8 +13,13 @@
 	</a>
 </h1>
 
+<div style="text-align: center;" markdown="1">
 
 Before start, you need to have the following tools installed on computer: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/) and/or [Yarn](https://yarnpkg.com/). [MySQl::Workbench](https://www.mysql.com/products/workbench/).
+
+</div>
+
+
 
 
 
