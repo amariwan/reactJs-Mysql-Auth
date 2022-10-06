@@ -4,7 +4,7 @@ import Header from '../Components/header/header';
 import Axios from 'axios';
 
 function HomePage() {
-	Axios.get('http://localhost:3001/auth/get').then((response) => {
+	Axios.get('http://localhost:3001/auth/get', { method: 'GET', withCredentials: true }).then((response) => {
 		console.log(response);
 	});
 	return (
