@@ -80,8 +80,8 @@ app.use(
 
 			// Preferred way to set Expires attribute. Time in milliseconds until
 			// the expiry. There's no default, so the cookie is non-persistent.
-			maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
-			// maxAge: 5 * 60 * 1000, // Setting the cookie to expire in 24 hours.
+			// maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
+			maxAge: 1 * 60 * 1000, 
 
 			// SameSite attribute in Set-Cookie header. Controls how cookies are sent
 			// with cross-site requests. Used to mitigate CSRF. Possible values are
@@ -93,7 +93,7 @@ app.use(
 			// sent over HTTPS. Can be set to true, false, or 'auto'. Default is false.
 			// secure: false,
 			// HostOnly: true,
-			HttpOnly: true // This is a security feature that prevents the cookie from being accessed by JavaScript.
+			HttpOnly: true, // This is a security feature that prevents the cookie from being accessed by JavaScript.
 		},
 	}),
 );
@@ -137,22 +137,7 @@ app.use('/auth', authRouter);
 const test1Router = require('./test/test_1');
 app.use('/test', test1Router);
 
-app.get('/', (req, res) => {
-	// A new uninitialized session is created for each request (but not
-	// persisted to the store if saveUninitialized is false). It's
-	// automatically serialized to JSON and can look something like
-	/*
-	  Session {
-	    cookie: {
-	      path: '/',
-	      _expires: 2018-11-18T01:33:01.043Z,
-	      originalMaxAge: 7200000,
-	      httpOnly: true,
-	      sameSite: true,
-	      secure: false
-	    }
-	  }
-	*/
+app.get('/', (req, res, next) => {
 	console.log(req.session);
 
 	// You can also access the cookie object above directly with
@@ -171,6 +156,27 @@ app.get('/', (req, res) => {
 	// Same as above. Alphanumeric ID that gets written to the cookie.
 	// It's also the SESSION_ID portion in 's:{SESSION_ID}.{SIGNATURE}'.
 	console.log(req.sessionID);
+});
+
+// error handler
+app.use((err, req, res, next) => {
+	console.log(values);
+	console.log('ich bin ');
+	if (err) res.status(400).send(err.message);
+	const { headers: { cookie } } = req;
+	if (cookie) {
+		const values = cookie.split(';').reduce((res, item) => {
+			const data = item.trim().split('=');
+			return {
+				...res,
+				[data[0]]: data[1],
+			};
+		}, {});
+		res.locals.cookie = values;
+		req.sessionID = values.session_id;
+	} else res.locals.cookie = {};
+
+	next();
 });
 
 /* This is telling the server to listen to port 3001. */

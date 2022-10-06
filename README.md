@@ -2,7 +2,7 @@
 
 
 <h1 align="center">
-  ReactJs Auth with MySQL API
+  🚧 ReactJs Auth with MySQL API 🚧
 	<br>
 	  <a href="https://choosealicense.com/licenses/mit">
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
