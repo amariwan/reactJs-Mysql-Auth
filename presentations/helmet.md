@@ -66,7 +66,7 @@ helmet.contentSecurityPolicy(options) lets you set the Content-Security-Policy w
   helmet.contentSecurityPolicy({
     useDefaults: true,
     directives: {
-      "script-src": ["'self'", "securecoding.com"],
+      "script-src": ["'self'", "localhost"],
       "style-src": null,
     },
   })
