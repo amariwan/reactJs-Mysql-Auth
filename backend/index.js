@@ -11,6 +11,18 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors'); //  A middleware that is used to parse the body of the request.
 require('dotenv').config();
+const helmet = require('helmet');
+
+app.use(helmet());
+app.use(
+	helmet.contentSecurityPolicy({
+		useDefaults: true,
+		directives: {
+			'script-src': [ "'self'", '' ],
+			'style-src': null,
+		},
+	}),
+);
 const SERVERPORT = process.env.SERVERPORT || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
