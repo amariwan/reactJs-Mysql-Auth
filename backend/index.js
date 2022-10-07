@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); //  A middleware that is used to parse the body of the request.
 const app = express();
 require('dotenv').config();
-const SERVERPORT = process.env.SERVERPORT;
+const SERVERPORT = process.env.SERVERPORT || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
 app.use(
@@ -134,36 +134,35 @@ app.use(cookieParser(SESSION_SECRET)); // any string ex: 'keyboard cat'
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
-const test1Router = require('./test/test_1');
+const test1Router = require('./test/test_1'); 
 app.use('/test', test1Router);
 
-app.get('/', (req, res, next) => {
-	console.log(req.session);
+
+
+app.use((req, res, next) => {
+	
+	// TODO:  
+	// check session id in DB, if agent is logger return true else return false	
 
 	// You can also access the cookie object above directly with
-	console.log(req.session.cookie);
+	//console.log(req.session.cookie);
 
 	// Beware that express-session only updates req.session on req.end(),
 	// so the values below are stale and will change after you read them
 	// (assuming that you roll sessions with resave and rolling).
-	console.log(req.session.cookie.expires); // date of expiry
-	console.log(req.session.cookie.maxAge); // milliseconds left until expiry
+	//console.log(req.session.cookie.expires); // date of expiry
+	//console.log(req.session.cookie.maxAge); // milliseconds left until expiry
 
 	// Unless a valid session ID cookie is sent with the request,
 	// the session ID below will be different for each request.
-	console.log(req.session.id); // ex: VdXZfzlLRNOU4AegYhNdJhSEquIdnvE-
+	//console.log(req.session.id); // ex: VdXZfzlLRNOU4AegYhNdJhSEquIdnvE-
 
 	// Same as above. Alphanumeric ID that gets written to the cookie.
 	// It's also the SESSION_ID portion in 's:{SESSION_ID}.{SIGNATURE}'.
-	console.log(req.sessionID);
-});
+	//console.log(req.sessionID);
 
-// error handler
-app.use((err, req, res, next) => {
-	console.log(values);
-	console.log('ich bin ');
-	if (err) res.status(400).send(err.message);
 	const { headers: { cookie } } = req;
+	console.log(cookie);
 	if (cookie) {
 		const values = cookie.split(';').reduce((res, item) => {
 			const data = item.trim().split('=');
@@ -176,7 +175,6 @@ app.use((err, req, res, next) => {
 		req.sessionID = values.session_id;
 	} else res.locals.cookie = {};
 
-	next();
 });
 
 /* This is telling the server to listen to port 3001. */

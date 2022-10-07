@@ -164,7 +164,7 @@ router.post('/login', (req, res) => {
 							username: email,
 							role: result[0].role,
 						};
-						// setSessionOnDB(req);
+						creatSessionOnDB(req);
 						res.send(req.session);
 					}
 				} else {
@@ -183,48 +183,33 @@ router.post('/login', (req, res) => {
 	});
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
 	var x = destroySessionOnDB(3);
 	console.log('logout completed', x);
 	res.send(x);
 });
 
-router.post('/logout', (req, res) => {
-	// Assuming the request was authenticated in /login above,
-	/*
-	  Session {
-	    cookie: {
-	      path: '/',
-	      _expires: 2018-11-18T02:03:01.926Z,
-	      originalMaxAge: 7200000,
-	      httpOnly: true,
-	      secure: false,
-	      sameSite: true
-	    },
-	    userId: 1 <-- userId from /login
-	  }
-	*/
-	// console.log(req.session)
-
-	// console.log(req.session.id) // ex: 0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA
-
+router.post('/logout', (req, res, next) => {
 	// Note that the portion between 's%3A' and '.' is the session ID above.
 	// 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
 	// sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
 	// console.log(req.get('cookie'))
 
+
 	// Upon logout, we can destroy the session and unset req.session.
-	// req.session.destroy(err => {
+	req.session.destroy(err => {
 	// We can also clear out the cookie here. But even if we don't, the
 	// session is already destroyed at this point, so either way, the
 	// user won't be able to authenticate with that same cookie again.
 	// res.clearCookie('session_id')
 
-	// })
-	console.log(req.session.user.userID);
-	var x = destroySessionOnDB(req.session.user.userID);
-	console.log('logout completed', x);
-	res.send(x);
+	})
+	req.session.destroy();
+	res.clearCookie('session_id');
+	var destroySession = destroySessionOnDB(req.session.user.userID);
+	console.log('logout completed', destroySession);
+	res.status(200).json({ message: 'ok', db_msg: destroySession });
+	next(); // this will give you the above exception
 });
 
 /* This is exporting the router object. */

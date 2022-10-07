@@ -3,7 +3,7 @@ const db = require('../database/index');
 
 
 const getSessionOnDB = (userId) => {
-  db.query('select * from session_users (userId) VALUE (?)', [userId], (error, response) => {
+  db.query('SELECT * FROM session_users (userId) VALUE (?)', [userId], (error, response) => {
     if (error) return error;
     if (response.length > 0) return response;
   })
@@ -36,7 +36,7 @@ const setSessionOnDB = (req) => {
   data = JSON.stringify(data);
   console.log("userID: " + userId, "session_id: " + session_id, "ip_address: " + ip_address, "expires: " + expires, "data: " + data);
   if (getSessionOnDB(userId) < 0) return;
-  db.query('UP session_users (userId, session_id, ip_address, expires, data) VALUE (?,?,?,?,?)', [userId, session_id, ip_address, expires, data], (error, response) => {
+  db.query('UPDATE session_users (userId, session_id, ip_address, expires, data) VALUE (?,?,?,?,?)', [userId, session_id, ip_address, expires, data], (error, response) => {
     if (error) return error;
     if (response.length > 0) return response;
   })
@@ -45,7 +45,7 @@ const setSessionOnDB = (req) => {
 }
 
 const compareSessionOnDB = (reqSession) => {
-  db.query('select * from session_users (userId) VALUE (?)', [reqSession], (error, response) => {
+  db.query('SELECT * FROM session_users (userId) VALUE (?)', [reqSession], (error, response) => {
     if (error) return error;
     if (response.length > 0) return response;
   })
