@@ -13,7 +13,6 @@ const cors = require('cors'); //  A middleware that is used to parse the body of
 require('dotenv').config();
 const helmet = require('helmet');
 
-app.use(helmet());
 app.use(
 	helmet.contentSecurityPolicy({
 		useDefaults: true,
