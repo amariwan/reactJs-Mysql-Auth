@@ -10,25 +10,6 @@ const clearAllcookie = require('../module/clearAllcookie');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
 
-router.get('/set', (req, res) => {
-	var sessionId = cookieParser.signedCookie(cookie, secret);
-	req.session.user = {
-		name: 'Aland',
-		lastname: 'Mariwan',
-	};
-	res.send(req.sessionId);
-	console.log(req);
-});
-
-router.get('/get', (req, res) => {
-	res.send(req.sessionID);
-	// console.log(req.sessionStore.sessions);
-	// console.log(req);
-});
-router.get('/det', (req, res) => {
-	req.session.destroy();
-	res.send(req.session.user);
-});
 
 /* This is a post request that is used to register a user. */
 router.post('/register', (req, res) => {
@@ -198,14 +179,8 @@ router.post('/logout', (req, res, next) => {
 	// console.log(req.get('cookie'))
 
 	// Upon logout, we can destroy the session and unset req.session.
-	req.session.destroy((err) => {
-		// We can also clear out the cookie here. But even if we don't, the
-		// session is already destroyed at this point, so either way, the
-		// user won't be able to authenticate with that same cookie again.
-		// res.clearCookie('session_id')
-	});
+	clearAllcookie(req, res);
 	req.session.destroy();
-	clearAllcookie(req);
 	var destroySession = destroySessionOnDB(req.session.user.userID);
 	console.log('logout completed', destroySession);
 	res.status(200).json({ message: 'ok', db_msg: destroySession });
