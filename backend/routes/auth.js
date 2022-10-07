@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
 const { encrypt, decrypt } = require('../module/crpyto');
 const { isEmail, checkUsername } = require('../module/check_userOrEmail');
 const { getSessionOnDB, setSessionOnDB, compareSessionOnDB, destroySessionOnDB } = require('../module/session');
+const clearAllcookie = require('../module/clearAllcookie');
+
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
 
@@ -195,17 +197,15 @@ router.post('/logout', (req, res, next) => {
 	// sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
 	// console.log(req.get('cookie'))
 
-
 	// Upon logout, we can destroy the session and unset req.session.
-	req.session.destroy(err => {
-	// We can also clear out the cookie here. But even if we don't, the
-	// session is already destroyed at this point, so either way, the
-	// user won't be able to authenticate with that same cookie again.
-	// res.clearCookie('session_id')
-
-	})
+	req.session.destroy((err) => {
+		// We can also clear out the cookie here. But even if we don't, the
+		// session is already destroyed at this point, so either way, the
+		// user won't be able to authenticate with that same cookie again.
+		// res.clearCookie('session_id')
+	});
 	req.session.destroy();
-	res.clearCookie('session_id');
+	clearAllcookie(req);
 	var destroySession = destroySessionOnDB(req.session.user.userID);
 	console.log('logout completed', destroySession);
 	res.status(200).json({ message: 'ok', db_msg: destroySession });

@@ -2,6 +2,7 @@
 const https = require('https');
 const fs = require('fs');
 const express = require('express');
+const app = express();
 // Sessions can be stored server-side (ex: user auth) or client-side
 // (ex: shopping cart). express-session saves sessions in a store, and
 // NOT in a cookie. To store sessions in a cookie, use cookie-session.
@@ -9,7 +10,6 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors'); //  A middleware that is used to parse the body of the request.
-const app = express();
 require('dotenv').config();
 const SERVERPORT = process.env.SERVERPORT || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -28,7 +28,7 @@ app.use(
 		/* This is a secret key that is used to encrypt the session. */
 
 		// Name for the session ID cookie. Defaults to 'connect.sid'.
-		name: 'session_id',
+		name: 'connect.sid',
 
 		// Whether to force-save unitialized (new, but not modified) sessions
 		// to the store. Defaults to true (deprecated). For login sessions, it
@@ -63,7 +63,7 @@ app.use(
 		// See https://github.com/expressjs/session/issues/468
 		cookie: {
 			// Path attribute in Set-Cookie header. Defaults to the root path '/'.
-			// path: '/',
+			path: '/',
 
 			// Domain attribute in Set-Cookie header. There's no default, and
 			// most browsers will only apply the cookie to the current domain.
@@ -71,7 +71,7 @@ app.use(
 
 			// HttpOnly flag in Set-Cookie header. Specifies whether the cookie can
 			// only be read server-side, and not by JavaScript. Defaults to true.
-			// httpOnly: true,
+			httpOnly: true,
 
 			// Expires attribute in Set-Cookie header. Set with a Date object, though
 			// usually maxAge is used instead. There's no default, and the browsers will
@@ -81,7 +81,7 @@ app.use(
 			// Preferred way to set Expires attribute. Time in milliseconds until
 			// the expiry. There's no default, so the cookie is non-persistent.
 			// maxAge: 1000 * 60 * 60 * 24, // Setting the cookie to expire in 24 hours.
-			maxAge: 1 * 60 * 1000, 
+			maxAge: 1 * 60 * 1000,
 
 			// SameSite attribute in Set-Cookie header. Controls how cookies are sent
 			// with cross-site requests. Used to mitigate CSRF. Possible values are
@@ -91,9 +91,8 @@ app.use(
 
 			// Secure attribute in Set-Cookie header. Whether the cookie can ONLY be
 			// sent over HTTPS. Can be set to true, false, or 'auto'. Default is false.
-			// secure: false,
+			secure: true,
 			// HostOnly: true,
-			HttpOnly: true, // This is a security feature that prevents the cookie from being accessed by JavaScript.
 		},
 	}),
 );
@@ -134,15 +133,12 @@ app.use(cookieParser(SESSION_SECRET)); // any string ex: 'keyboard cat'
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
-const test1Router = require('./test/test_1'); 
+const test1Router = require('./test/test_1');
 app.use('/test', test1Router);
 
-
-
 app.use((req, res, next) => {
-	
-	// TODO:  
-	// check session id in DB, if agent is logger return true else return false	
+	// TODO:
+	// check session id in DB, if agent is logger return true else return false
 
 	// You can also access the cookie object above directly with
 	//console.log(req.session.cookie);
@@ -174,7 +170,6 @@ app.use((req, res, next) => {
 		res.locals.cookie = values;
 		req.sessionID = values.session_id;
 	} else res.locals.cookie = {};
-
 });
 
 /* This is telling the server to listen to port 3001. */
