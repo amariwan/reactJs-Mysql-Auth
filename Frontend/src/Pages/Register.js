@@ -14,15 +14,15 @@ const Register = ({ logado = false }) => {
 
 	const handleRegister = (values) => {
 		// const notify = toast.loading('Loading...');
-		var name = values.name;
-		var lastname = values.lastname;
-		var username = values.username;
-		var email = values.email;
+		var name = values.name.toLowerCase();
+		var lastname = values.lastname.toLowerCase();
+		var username = values.username.toLowerCase();
+		var email = values.email.toLowerCase();
 		var password = values.password;
-		var nameHash = encrypt(name);
-		var lastnameHash = encrypt(lastname);
-		var usernameHash = encrypt(username);
-		var emailHash = encrypt(email);
+		var nameHash = encrypt(name).toLowerCase();
+		var lastnameHash = encrypt(lastname).toLowerCase();
+		var usernameHash = encrypt(username).toLowerCase();
+		var emailHash = encrypt(email).toLowerCase();
 		var passwordHash = bcrypt.hashSync(password, saltRounds); // hash created previously created upon sign up;
 		Axios.post('https://localhost:4000/auth/register', {
 			name: nameHash,

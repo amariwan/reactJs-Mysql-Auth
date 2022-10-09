@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
 const { encrypt, decrypt } = require('../module/crpyto');
 const { isEmail, checkUsername } = require('../module/check_userOrEmail');
 const { getSessionOnDB, setSessionOnDB, compareSessionOnDB, destroySessionOnDB } = require('../module/session');
-const clearAllcookie = require('../module/clearAllcookie');
+const clearAllcookie = require('../module/cookie');
 
 
 const saltRounds = 10; // The number of rounds to use when generating a salt

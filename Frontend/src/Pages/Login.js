@@ -13,7 +13,7 @@ const Login = ({ logado = false }) => {
 	const [ isActive, setIsActive ] = useState(false);
 	const handleLogin = (values) => {
 		notify = toast.loading('Loading...');
-		var emailHash = encrypt(values.email);
+		var emailHash = encrypt(values.email).toLowerCase();
 		var passwordHash = encrypt(values.password);
 		Axios.post('https://localhost:4000/auth/login', {
 			email: emailHash,
