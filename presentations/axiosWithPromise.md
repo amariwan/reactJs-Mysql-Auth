@@ -64,3 +64,9 @@ resolveData() {
 
 Ultimately, you don't "return" data as such, I mean you can but it's more idiomatic to change your way of thinking... Now we are sending data to asynchronous methods.
 
+# Resources
+
+- [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise?retiredLocale=de)
+- [javascript.info/promise-basics](https://javascript.info/promise-basics)
+- [Axios](https://axios-http.com/de/docs/intro)
+- [Axios#Promise](https://github.com/axios/axios#promises)

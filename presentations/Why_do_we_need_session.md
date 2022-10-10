@@ -16,4 +16,3 @@ The answer is going to be based on what's critical for your application. General
 
 Lot's of services have sessions and access token management baked in, and for a working example and more about tokens, check out [any one of many knowledge bases](https://authress.io/knowledge-base/).
 
-[##](https://stackoverflow.com/questions/50405628/why-do-we-need-session-when-we-already-have-cookies#:~:text=It%20is%20preferred%20to%20use,play%20requests%20to%20your%20site.)

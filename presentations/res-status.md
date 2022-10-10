@@ -76,3 +76,8 @@ res.sendStatus(2000); // equivalent to res.status(2000).send('2000')
 |  res.bandwidthLimitExceeded(); | 509 |Bandwidth Limit Exceeded |
 |  res.notExtended(); | 510 |Not Extended |
 |  res.networkAuthenticationRequired(); | 511 |Network Authentication Required |
+
+
+# Resources
+
+- [express-res-status](https://www.npmjs.com/package/express-res-status)
