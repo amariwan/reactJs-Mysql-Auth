@@ -26,6 +26,7 @@ Before start, you need to have the following tools installed on computer: [Git](
 - [Quick Start](#quick-start)
   - [Installing](#installing)
   - [Creating an SSL Certificate](#creating-an-ssl-certificate)
+  - [Using Environment Variables in Local Development](#using-environment-variables-in-local-development)
 - [API](#api)
 - [Sessions](#sessions)
     - [Flow](#flow)
@@ -74,7 +75,24 @@ Before start, you need to have the following tools installed on computer: [Git](
 
 ## Features
 
-`coming soon` 
+
+The Stack:
+
+ React + Express + Axios .
+
+1. React Scaffolding
+1. React-router
+1. Postgres
+1. NodeJS Express web server  
+
+Security:
+
+1. Username and Password Sign-in and Sign-up
+1. HelmetJS for header protection mechanisms
+1. TLS/SSL By default
+1. XSS protections
+1. CSRF protections
+1. Secure sessions
 
 ## Browser Support
 
@@ -120,8 +138,9 @@ openssl req -new -key key.pem -out csr.pem
 ```bash
 openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
 ```
+## Using Environment Variables in Local Development
 
-Change your mySQL database data .env
+Create a file called .env in the root of your project, and then add all the environment variables you need into this using the following format:
 ```bash
 cp -r env .env
 ```

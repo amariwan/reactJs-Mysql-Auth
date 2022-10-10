@@ -24,13 +24,23 @@ const Register = ({ logado = false }) => {
 		var usernameHash = encrypt(username).toLowerCase();
 		var emailHash = encrypt(email).toLowerCase();
 		var passwordHash = bcrypt.hashSync(password, saltRounds); // hash created previously created upon sign up;
-		Axios.post('https://localhost:4000/auth/register', {
-			name: nameHash,
-			lastname: lastnameHash,
-			username: usernameHash,
-			email: emailHash,
-			password: passwordHash,
-		}).then((response) => {
+		Axios.post(
+			'https://localhost:4000/auth/register',
+			{
+				name: nameHash,
+				lastname: lastnameHash,
+				username: usernameHash,
+				email: emailHash,
+				password: passwordHash,
+			},
+			{
+				withCredentials: true,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/json',
+				},
+			},
+		).then((response) => {
 			console.log(response);
 			if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right' });
 			if (response.data.code === 101) return toast(response.data.msg, { position: 'bottom-right' });

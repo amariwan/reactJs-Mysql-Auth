@@ -8,7 +8,8 @@ const test = () => {
 	  },
 	  withCredentials: true		
 	}).then((response) => {
-	console.log(response);
+		console.log(response);
+		console.log(response.data.session);
 		return response;
 	})
 

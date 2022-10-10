@@ -4,12 +4,10 @@ const db = require('../database/index');
 const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
 const { encrypt, decrypt } = require('../module/crpyto');
 const { isEmail, checkUsername } = require('../module/check_userOrEmail');
-const { getSessionOnDB, setSessionOnDB, compareSessionOnDB, destroySessionOnDB } = require('../module/session');
-const clearAllcookie = require('../module/cookie');
-
+const { creatSessionOnDB, getSessionOnDB, setSessionOnDB, compareSessionOnDB, destroySessionOnDB } = require('../module/session');
+const { clearAllcookie, getSessionIDCookie } = require('../module/cookie');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
-
 
 /* This is a post request that is used to register a user. */
 router.post('/register', (req, res) => {
@@ -85,7 +83,7 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-	console.log(req.sessionID);
+	console.log(req.session_id);
 	if (req.session.user) {
 		res.send({
 			loggedIn: true,
@@ -126,28 +124,33 @@ router.post('/login', (req, res) => {
 		if (result.length > 0) {
 			bcrypt.compare(password, result[0].password, (error, response) => {
 				if (error) {
-					console.log('error :' + error);
+					// console.log('error :' + error);
 					res.send(error);
 				} else if (err) {
-					console.log('err :' + err);
+					// console.log('err :' + err);
 					res.send(err);
 				}
 				if (response == true) {
-					console.log(req.session);
 					if (req.session.user) {
 						res.send({
 							loggedIn: true,
 							user: req.session.user,
 						});
 					} else {
+						console.log('User not logged in');
 						req.session.user = {
 							name: result[0].name,
 							lastname: result[0].lastname,
 							userID: result[0].userID,
 							username: email,
 							role: result[0].role,
+							loggedIn: true,
 						};
+						req.session.views = (req.session.views || 0) + 1;
+						getSessionIDCookie(req, res);
 						creatSessionOnDB(req);
+						console.log(req.session);
+						console.log(req.session_id);
 						res.send(req.session);
 					}
 				} else {
@@ -166,24 +169,26 @@ router.post('/login', (req, res) => {
 	});
 });
 
-router.get('/logout', (req, res, next) => {
-	var x = destroySessionOnDB(3);
-	console.log('logout completed', x);
-	res.send(x);
-});
 
-router.post('/logout', (req, res, next) => {
+router.get('/get', (req, res, next)=>{
+	req.session.views = (req.session.views || 0) + 1;
+	res.status(200).json({ message: 'ok', req: req.session });
+	next(); // this will give you the above exception
+})
+
+router.get('/logout', (req, res, next) => {
 	// Note that the portion between 's%3A' and '.' is the session ID above.
 	// 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
 	// sid=s%3A0kVkUn7KUX1UZGnjagDKd_NPerjXKJsA.senfzYOeNHCtGUNP4bv1%2BSdgSdZWFtoAaM73odYtLDo
 	// console.log(req.get('cookie'))
 
 	// Upon logout, we can destroy the session and unset req.session.
-	clearAllcookie(req, res);
-	req.session.destroy();
+	console.log(req.session.user.userID);
 	var destroySession = destroySessionOnDB(req.session.user.userID);
 	console.log('logout completed', destroySession);
-	res.status(200).json({ message: 'ok', db_msg: destroySession });
+	req.session.destroy();
+	clearAllcookie(req, res);
+	res.status(200).json({ message: 'ok', req: req.session });
 	next(); // this will give you the above exception
 });
 

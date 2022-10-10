@@ -13,22 +13,28 @@ const Login = ({ logado = false }) => {
 	const [ isActive, setIsActive ] = useState(false);
 	const handleLogin = (values) => {
 		notify = toast.loading('Loading...');
-		var emailHash = encrypt(values.email).toLowerCase();
+		var email = values.email.toLowerCase();
+		var emailHash = encrypt(email);
 		var passwordHash = encrypt(values.password);
-		Axios.post('https://localhost:4000/auth/login', {
-			email: emailHash,
-			password: passwordHash,
-		}).then((response) => {
-			console.log(response.data.user);
+		Axios.post(
+			'https://localhost:4000/auth/login',
+			{
+				email: emailHash,
+				password: passwordHash,
+			},
+			{
+				withCredentials: true,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/json',
+				},
+			},
+		).then((response) => {
 			console.log(response);
-			return;
 			if (response.data.user.username === values.email) {
-			}
-			const page = response.data;
-			if (page === true) {
-				//localStorage.setItem('@user', JSON.stringify(response.config.data));
-				//window.location.reload();
-				console.log(response);
+				localStorage.setItem('@user', JSON.stringify(response.data.user));
+				// window.location.reload();
+				toast(response.data.msg, { position: 'bottom-right', id: notify });
 			} else {
 				if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right', id: notify });
 				if (response.data.code === 101) return toast(response.data.msg, { position: 'bottom-right', id: notify });

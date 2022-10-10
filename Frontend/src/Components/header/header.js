@@ -5,10 +5,17 @@ import Axios from 'axios';
 function Header() {
     
     const logout = () => {
-        Axios.get('http://localhost:3001/auth/logout').then((response) => {
+        Axios.get('https://localhost:4000/auth/logout', {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+            method: 'GET',
+        }).then((response) => {
             console.log(response);
-        
-        })
+            console.log(response.data.session);
+            return response;
+        });
         localStorage.clear();
         // window.location.reload();
     }

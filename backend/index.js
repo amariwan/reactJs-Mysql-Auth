@@ -12,16 +12,36 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); //  A middleware that is used to parse the body of the request.
 require('dotenv').config();
 const helmet = require('helmet');
+const crypto = require('crypto');
+const nonce = crypto.randomBytes(16).toString('hex'); //#endregion
 
-app.use(
-	helmet.contentSecurityPolicy({
-		useDefaults: true,
-		directives: {
-			'script-src': [ "'self'", '' ],
-			'style-src': null,
-		},
-	}),
-);
+// ======== *** SECURITY MIDDLEWARE ***
+
+//setup helmet js
+app.use(helmet());
+
+//setting CSP
+const csp = {
+	defaultSrc: [ `'none'` ],
+	styleSrc: [ `'self'`, `'unsafe-inline'` ],
+	scriptSrc: [
+		`'self'`,
+		// node_modules/govuk-frontend/template.njk, xpath: //html/body/script[1]
+		`'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='`,
+		'www.google-analytics.com',
+		'www.googletagmanager.com',
+	],
+	imgSrc: [ `'self'`, 'www.google-analytics.com' ],
+	connectSrc: [ `'self'`, 'www.google-analytics.com' ],
+	frameSrc: [ `'self'` ],
+	fontSrc: [ `'self'`, 'data:' ],
+	objectSrc: [ `'self'` ],
+	mediaSrc: [ `'self'` ],
+};
+
+app.use(helmet.contentSecurityPolicy(csp));
+
+//  app.use(helmet.noCache()); // noCache disabled by default
 const SERVERPORT = process.env.SERVERPORT || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
@@ -31,8 +51,14 @@ app.use(
 		origin: true,
 	}),
 );
-app.set('trust proxy', 1); // trust first proxy
 
+app.set('trust proxy', true); // trust first proxy
+app.disable('x-powered-by');
+app.use(helmet.hidePoweredBy());
+const sixtyDaysInSeconds = 5184000 // 60 * 24 * 60 * 60
+app.use(helmet.hsts({
+maxAge: sixtyDaysInSeconds
+}))
 //session middleware
 app.use(
 	session({
@@ -147,7 +173,7 @@ app.use('/auth', authRouter);
 const test1Router = require('./test/test_1');
 app.use('/test', test1Router);
 
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
 	// TODO:
 	// check session id in DB, if agent is logger return true else return false
 
@@ -180,6 +206,8 @@ app.use((req, res, next) => {
 		res.locals.cookie = values;
 		req.sessionID = values.session_id;
 	} else res.locals.cookie = {};
+	console.error(err);
+	res.status(500).send('Internal server error');
 });
 
 /* This is telling the server to listen to port 3001. */
@@ -193,7 +221,7 @@ https
 		},
 		app,
 	)
-	.listen(SERVERPORT, (err) => {
+	.listen(SERVERPORT, '0.0.0.0', (err) => {
 		if (err) {
 			throw err;
 		} else {
