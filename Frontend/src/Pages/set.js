@@ -2,18 +2,22 @@ import React from 'react';
 import Axios from 'axios';
 
 const test = () => {
-	Axios.get('https://localhost:4000/test/set', {
-	  headers: {
-	    'Content-Type': 'application/json'
-	  },
-	  withCredentials: true		
+	var name = Axios.get('https://localhost:4000/test/set', {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		withCredentials: true,
 	}).then((response) => {
-	console.log(response);
+		getResponse(response);
 		return response;
-	})
+	});
+	const getResponse = (response) => {
+		return response;
+	};
+console.log(name.then());
 	return (
 		<div>
-			<h1>Aland</h1>
+			<h1>{name}</h1>
 		</div>
 	);
 };

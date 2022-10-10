@@ -1,16 +1,17 @@
-const getCookie = (req, res) => {
+const getSessionIDCookie = (req, res) => {
 	const { headers: { cookie } } = req;
 	if (cookie) {
-		const values = cookie.split(';').reduce((res, item) => {
+		const item = cookie.split(';').reduce((res, item) => {
 			const data = item.trim().split('=');
 			return {
 				...res,
 				[data[0]]: data[1],
 			};
 		}, {});
-		res.locals.cookie = values;
-		console.log(values);
-		req.CookieSessionID = values.session_id;
+		const keys = Object.keys(item);
+		const values = Object.values(item);
+		res.locals.cookie = item;
+		req[keys] = values;
 	} else res.locals.cookie = {};
 };
 
@@ -26,4 +27,4 @@ const clearAllcookie = (req, res) => {
 	return true;
 };
 
-module.exports = { clearAllcookie, getCookie };
+module.exports = { clearAllcookie, getSessionIDCookie };
