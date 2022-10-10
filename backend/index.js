@@ -39,7 +39,7 @@ app.use(
 		/* This is a secret key that is used to encrypt the session. */
 
 		// Name for the session ID cookie. Defaults to 'connect.sid'.
-		name: 'connect.sid',
+		name: 'session_id',
 
 		// Whether to force-save unitialized (new, but not modified) sessions
 		// to the store. Defaults to true (deprecated). For login sessions, it

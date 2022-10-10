@@ -3,19 +3,15 @@ const getCookie = (req, res) => {
 	if (cookie) {
 		const values = cookie.split(';').reduce((res, item) => {
 			const data = item.trim().split('=');
-			var item = {
+			return {
 				...res,
 				[data[0]]: data[1],
 			};
-			console.log(item);
-			return item;
-		});
+		}, {});
 		res.locals.cookie = values;
-		req.sessionID = values.session_id;
-	} else {
-		res.locals.cookie = {};
-		return null;
-	}
+		console.log(values);
+		req.CookieSessionID = values.session_id;
+	} else res.locals.cookie = {};
 };
 
 const clearAllcookie = (req, res) => {

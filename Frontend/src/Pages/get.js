@@ -2,6 +2,7 @@ import React from 'react';
 import Axios from 'axios';
 
 const test = () => {
+	var name = "none";
 	Axios.get('https://localhost:4000/test/get', {
 	  headers: {
 	    'Content-Type': 'application/json'
