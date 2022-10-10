@@ -4,6 +4,13 @@
 <h1 align="center">
   🚧 ReactJs Auth with MySQL API 🚧
 	<br>
+</h1>
+
+<div align="center">
+
+Before start, you need to have the following tools installed on computer: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/) and/or [Yarn](https://yarnpkg.com/). [MySQl::Workbench](https://www.mysql.com/products/workbench/).
+
+<br>
 	  <a href="https://choosealicense.com/licenses/mit">
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
 	</a>
@@ -11,20 +18,79 @@
 	<a href="https://github.com/amariwan/reactJs-Mysql-Auth">
 		<img src="https://img.shields.io/github/stars/amariwan/reactJs-Mysql-Auth?style=social">
 	</a>
-</h1>
-
-<div align="center">
-
-Before start, you need to have the following tools installed on computer: [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/) and/or [Yarn](https://yarnpkg.com/). [MySQl::Workbench](https://www.mysql.com/products/workbench/).
-
 </div>
 
+## Table of Contents
+  * [Table of Contents](#table-of-contents)
+  * [Features](#features)
+  * [Browser Support](#browser-support)
+- [Quick Start](#quick-start)
+  * [Installing](#installing)
+  * [Creating an SSL Certificate](#creating-an-ssl-certificate)
+- [API](#api)
+- [Sessions](#sessions)
+    + [Flow](#flow)
+    + [Features](#features-1)
+- [Cookies](#cookies)
+    + [Security](#security)
+    + [Attributes](#attributes)
+    + [Flags](#flags)
+    + [CSRF](#csrf)
+  * [Tokens](#tokens)
+    + [Flow](#flow-1)
+    + [Features](#features-2)
+  * [JWT (JSON Web Tokens)](#jwt--json-web-tokens-)
+    + [Security](#security-1)
+    + [XSS](#xss)
+- [Client Storage](#client-storage)
+    + [`localStorage`](#-localstorage-)
+      - [Pros](#pros)
+      - [Cons](#cons)
+      - [Best for](#best-for)
+      - [Worst for](#worst-for)
+- [Sessions vs. JWT](#sessions-vs-jwt)
+    + [Sessions + Cookies](#sessions---cookies)
+      - [Pros](#pros-1)
+      - [Cons](#cons-1)
+    + [JWT Auth](#jwt-auth)
+      - [Pros](#pros-2)
+      - [Cons](#cons-2)
+- [Options for Auth in SPAs / APIs](#options-for-auth-in-spas---apis)
+    + [Stateless JWT](#stateless-jwt)
+    + [Stateful JWT](#stateful-jwt)
+    + [Sessions](#sessions-1)
+    + [Verdict](#verdict)
+- [Why not JWT?](#why-not-jwt-)
+    + [Important](#important)
+    + [Auxiliary measures](#auxiliary-measures)
+- [How to encrypt and decrypt in nodejs](#how-to-encrypt-and-decrypt-in-nodejs)
+  * [1. Hash functions with Bcrypt (one-way)](#1-hash-functions-with-bcrypt--one-way-)
+- [2. Simple Encryption and Decryption (two-way)](#2-simple-encryption-and-decryption--two-way-)
+- [errorcodes messages 🦠](#errorcodes-messages)
+- [Libraries used 🚀](#libraries-used)
+    + [Frontend:](#frontend-)
+    + [Backend:](#backend-)
+- [License](#license)
+
+
+## Features
+
+`coming soon` 
+
+## Browser Support
+
+Browsers support
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/samsung-internet/samsung-internet_48x48.png" alt="Samsung" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Samsung | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/vivaldi/vivaldi_48x48.png" alt="Vivaldi" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Vivaldi | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IE9, IE11, Edge                                                                                                                                                                                                 | last 2 versions                                                                                                                                                                                                   | last 2 versions                                                                                                                                                                                               | last 2 versions                                                                                                                                                                                               | last 2 versions                                                                                                                                                                                                               | last 2 versions                                                                                                                                                                                                                     | last 2 versions                                                                                                                                                                                           | last 2 versions                                                                                                                                                                                                   | last 2 versions                                                                                                                                                                                                       |
 
 
 
 
-### 📗 Quick Start
+# Quick Start 
 
+## Installing
 Install backend and Frontend by running either of the following:
 > Install NodeJS LTS from NodeJs Official Page (NOTE: Product only works with LTS version)
 
@@ -84,7 +150,22 @@ or
 npm start
 ```
 ----
-## Sessions
+# API
+Server will listen on port `yourServerPort`, and it expose the following APIs:
+
+
+- **POST** - `/auth/register` - Register a new user
+  - **name** - *string*
+  - **lastname** - *string*
+  - **username** - *string*
+  - **email** - *string*
+  - **password** - *string*
+
+- **POST** - `/auth/login` - Login user
+  - **email** - *string* or **username** - *string*
+  - **password** - *string*
+
+# Sessions
 
 ### Flow
 
@@ -111,7 +192,7 @@ npm start
     - protected with flags
 - SSR web apps, frameworks (`Spring`, `Rails`), scripting langs (`PHP`)
 
-## Cookies
+# Cookies
 
 - `Cookie` header, just like `Authorization` or `Content-Type`
 - used in session management, personalization, tracking
@@ -222,7 +303,7 @@ atob('eyJzdWIiOiI1YmQ2MWFhMWJiNDNmNzI0M2EyOTMxNmQiLCJuYW1lIjoiSm9obiBTbWl0aCIsIm
   - initiate AJAX requests on behalf of user
 - mitigated by sanitizing & escaping user input
 
-## Client Storage
+# Client Storage
 
 - JWT can be stored in client storage, `localStorage` or `sessionStorage`
 
@@ -257,7 +338,7 @@ Browser key-value store with a simple JS API
 - non-string data
 - offline capabilities
 
-## Sessions vs. JWT
+# Sessions vs. JWT
 
 ### Sessions + Cookies
 
@@ -299,7 +380,7 @@ Browser key-value store with a simple JS API
     - access website resources on user's behalf
 - requires JavaScript to be enabled
 
-## Options for Auth in SPAs / APIs
+# Options for Auth in SPAs / APIs
 
 1. Sessions
 2. Stateless JWT
@@ -335,11 +416,11 @@ Browser key-value store with a simple JS API
   - scoped to the origin with `Domain` & `Path` attrs
 - another cookie can hold CSRF token
 
-## Verdict
+### Verdict
 
 Sessions are (probably) better suited for web apps and websites.
 
-## Why not JWT?
+# Why not JWT?
 
 - server state needs to be maintained either way
 - sessions are easily extended or invalidated
@@ -367,20 +448,7 @@ Regardless of auth mechanism
 - two-factor auth
 - API throttling
 
-# API
-Server will listen on port `3001`, and it expose the following APIs:
 
-
-- **POST** - `/auth/register` - Register a new user
-  - **name** - *string*
-  - **lastname** - *string*
-  - **username** - *string*
-  - **email** - *string*
-  - **password** - *string*
-
-- **POST** - `/auth/login` - Login user
-  - **email** - *string* or **username** - *string*
-  - **password** - *string*
 
 ---------
 # How to encrypt and decrypt in nodejs
@@ -447,7 +515,7 @@ function decrypt(text){
 
 
 ---
-## 🦠  errorcodes messages 
+# errorcodes messages 🦠
 
 A table that shows the error codes and their respective messages.
 | code  | Msg  |
@@ -460,9 +528,9 @@ A table that shows the error codes and their respective messages.
 | 105 | Email or password incorrect|
 | 106 | User successfully registered|
 
-## 🚀 Libraries used
+#  Libraries used 🚀
 
-  Frontend: 
+###  Frontend: 
 * [react](https://reactjs.org/)
 * [react-dom](https://www.npmjs.com/package/react-dom)
 * [react-hot-toast](https://www.npmjs.com/package/react-hot-toast)
@@ -470,7 +538,7 @@ A table that shows the error codes and their respective messages.
 * [crypto-js](https://www.npmjs.com/package/crypto-js)
 
 
-  Backend: 
+###  Backend: 
 * [express](https://www.npmjs.com/package/express)
 * [express-session](https://www.npmjs.com/package/express-session)
 * [cors](https://www.npmjs.com/package/cors)
@@ -484,5 +552,5 @@ A table that shows the error codes and their respective messages.
 * [crypto](https://www.npmjs.com/package/crypto)
 
 
-## License
+# License
 Licensed under the MIT license.
