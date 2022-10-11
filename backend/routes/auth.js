@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
 	const password = req.body.password;
 	/* This is checking if the email is valid. */
 	if (!isEmail(email)) {
-		res.send({
+		res.status(203).send({
 			msg: 'Invalid email',
 			code: 101,
 		});
@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
 
 	/* This is checking if the username is valid. */
 	if (!checkUsername(username)) {
-		res.send({
+		res.status(203).send({
 			msg: 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
 			code: 102,
 		});
@@ -37,44 +37,48 @@ router.post('/register', (req, res) => {
 
 	/* This is checking if the password is at least 8 characters long. */
 	if (password.length < 8)
-		return res.send({
+		return res.status(203).send({
 			msg: 'Password must be at least 8 characters long.',
 		});
 
 	/* This is checking if the username is already registered. */
 	db.query('SELECT * FROM users WHERE username = ?', [ username ], function(err, result) {
-		if (err) throw err;
+		if (err) throw res.status(500).send({
+			msg: err,
+		});;
 		if (result.length == 0) {
 			/* This is checking if the Email is already registered. */
 			db.query('SELECT * FROM users WHERE email = ?', [ email ], function(err, result) {
-				if (err) throw err;
+				if (err) throw res.status(500).send({
+					msg: err,
+				});
 				if (result.length == 0) {
 					/* This is inserting the data into the database. */
 					db.query('INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)', [ name, lastname, username, email, password ], (error, response) => {
 						if (error) {
-							res.send({
+							res.status(500).send({
 								msg: error,
 							});
 						} else if (err) {
-							res.send({
+							res.status(500).send({
 								msg: err,
 							});
 						} else {
-							res.send({
+							res.status(200).send({
 								msg: 'User successfully registered',
 								code: 201,
 							});
 						}
 					});
 				} else {
-					res.send({
+					res.status(203).send({
 						msg: 'Email already registered',
 						code: 100,
 					});
 				}
 			});
 		} else {
-			res.send({
+			res.status(203).send({
 				msg: 'username already registered',
 				code: 100,
 			});
@@ -85,12 +89,12 @@ router.post('/register', (req, res) => {
 router.get('/login', (req, res) => {
 	console.log(req.session_id);
 	if (req.session.user) {
-		res.send({
+		res.status(200).send({
 			loggedIn: true,
 			user: req.session.user,
 		});
 	} else {
-		res.send({
+		res.status(500).send({
 			loggedIn: false,
 		});
 	}
@@ -111,7 +115,7 @@ router.post('/login', (req, res) => {
 		userOrEmail = 'email';
 	} else {
 		if (!checkUsername(email)) {
-			res.send({
+			res.status(203).send({
 				msg: 'Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.',
 				code: 102,
 			});
@@ -120,20 +124,19 @@ router.post('/login', (req, res) => {
 	}
 	/* This is checking if the user is registered. */
 	db.query('SELECT * FROM users WHERE ' + userOrEmail + ' = ?', [ email ], (err, result) => {
-		if (err) res.send(err);
+		if (err) res.status(500).send(err);
 		if (result.length > 0) {
 			bcrypt.compare(password, result[0].password, (error, response) => {
 				if (error) {
 					// console.log('error :' + error);
-					res.send(error);
+					res.status(500).send(error);
 				} else if (err) {
 					// console.log('err :' + err);
-					res.send(err);
+					res.status(500).send(err);
 				}
-				if (response == true) {
+				if (response == true && result[0].isLogged) {
 					if (req.session.user) {
-						res.send({
-							loggedIn: true,
+						res.status(200).send({
 							user: req.session.user,
 						});
 					} else {
@@ -151,17 +154,17 @@ router.post('/login', (req, res) => {
 						creatSessionOnDB(req);
 						console.log(req.session);
 						console.log(req.session_id);
-						res.send(req.session);
+						res.status(200).send(req.session);
 					}
 				} else {
-					res.send({
+					res.status(203).send({
 						msg: 'Email or password incorrect',
 						code: 105,
 					});
 				}
 			});
 		} else {
-			res.send({
+			res.status(203).send({
 				msg: 'Not registered user!',
 				code: 104,
 			});
@@ -172,7 +175,7 @@ router.post('/login', (req, res) => {
 
 router.get('/get', (req, res, next)=>{
 	req.session.views = (req.session.views || 0) + 1;
-	res.status(200).json({ message: 'ok', req: req.session });
+	res.status(200).json({ req: req.session });
 	next(); // this will give you the above exception
 })
 
@@ -188,7 +191,7 @@ router.get('/logout', (req, res, next) => {
 	console.log('logout completed', destroySession);
 	req.session.destroy();
 	clearAllcookie(req, res);
-	res.status(200).json({ message: 'ok', req: req.session });
+	res.status(200).json({ req: req.session });
 	next(); // this will give you the above exception
 });
 
