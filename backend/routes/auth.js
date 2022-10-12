@@ -134,7 +134,7 @@ router.post('/login', (req, res) => {
 					// console.log('err :' + err);
 					res.status(500).send(err);
 				}
-				if (response == true && result[0].isLogged) {
+				if (response == true) {
 					if (req.session.user) {
 						res.status(200).send({
 							user: req.session.user,
