@@ -154,7 +154,11 @@ router.post('/login', (req, res) => {
 						creatSessionOnDB(req);
 						console.log(req.session);
 						console.log(req.session_id);
-						res.status(200).send(req.session);
+						res.status(200).send({
+							msg: 'successfully',
+							session:req.session,
+							code: 105
+						});
 					}
 				} else {
 					res.status(203).send({
