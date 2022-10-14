@@ -24,6 +24,7 @@ exports.notFound = (req, res, next) => {
     success: false,
     message: "Api url doesn't exist ",
   });
+	next(); // this will give you the above exception
 };
 
 /*
@@ -56,3 +57,4 @@ exports.productionErrors = (err, req, res, next) => {
     error: err,
   });
 };
+

@@ -179,47 +179,8 @@ const test1Router = require('./test/test_1');
 app.use('/test', test1Router);
 
 
+
 // pass variables to our templates + all requests
-app.use((err, req, res, next) => {
-	// TODO:
-	// check session id in DB, if agent is logger return true else return false
-
-	// You can also access the cookie object above directly with
-	//console.log(req.session.cookie);
-
-	// Beware that express-session only updates req.session on req.end(),
-	// so the values below are stale and will change after you read them
-	// (assuming that you roll sessions with resave and rolling).
-	//console.log(req.session.cookie.expires); // date of expiry
-	//console.log(req.session.cookie.maxAge); // milliseconds left until expiry
-
-	// Unless a valid session ID cookie is sent with the request,
-	// the session ID below will be different for each request.
-	//console.log(req.session.id); // ex: VdXZfzlLRNOU4AegYhNdJhSEquIdnvE-
-
-	// Same as above. Alphanumeric ID that gets written to the cookie.
-	// It's also the SESSION_ID portion in 's:{SESSION_ID}.{SIGNATURE}'.
-	//console.log(req.sessionID);
-
-	// const { headers: { cookie } } = req;
-	// if (cookie) {
-	// 	const values = cookie.split(';').reduce((res, item) => {
-	// 		const data = item.trim().split('=');
-	// 		return {
-	// 			...res,
-	// 			[data[0]]: data[1],
-	// 		};
-	// 	}, {});
-	// 	res.locals.cookie = values;
-	// 	req.sessionID = values.session_id;
-	// } else res.locals.cookie = {};
-	// console.error(err);
-	// res.status(500).send('Internal server error');
-	req.session.views = (req.session.views || 0) + 1;
-	res.status(200).json({ req: req.session });
-	next(); // this will give you the above exception
-});
-
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);
