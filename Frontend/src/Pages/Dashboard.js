@@ -4,7 +4,7 @@ import Header from '../Components/header/header';
 import Axios from 'axios';
 
 function HomePage() {
-	Axios.get('https://localhost:4000/auth/get', {
+	Axios.get('https://localhost:4000/', {
 		headers: {
 			'Content-Type': 'application/json',
 		},

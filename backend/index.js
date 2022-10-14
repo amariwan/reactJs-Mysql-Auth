@@ -1,24 +1,24 @@
 /* This is importing the modules that we need to use in our application. */
+const express = require('express');
+
+const helmet = require('helmet');
+const cors = require('cors'); //  A middleware that is used to parse the body of the request.
 const https = require('https');
 const fs = require('fs');
-const express = require('express');
-const app = express();
+const errorHandlers = require('./handlers/errorHandlers');
+
 // Sessions can be stored server-side (ex: user auth) or client-side
 // (ex: shopping cart). express-session saves sessions in a store, and
 // NOT in a cookie. To store sessions in a cookie, use cookie-session.
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const cors = require('cors'); //  A middleware that is used to parse the body of the request.
 require('dotenv').config();
-const helmet = require('helmet');
 const crypto = require('crypto');
 const nonce = crypto.randomBytes(16).toString('hex'); //#endregion
 
-// ======== *** SECURITY MIDDLEWARE ***
-
-//setup helmet js
-app.use(helmet());
+// create our Express app
+const app = express();
 
 //setting CSP
 const csp = {
@@ -26,24 +26,30 @@ const csp = {
 	styleSrc: [ `'self'`, `'unsafe-inline'` ],
 	scriptSrc: [
 		`'self'`,
-		// node_modules/govuk-frontend/template.njk, xpath: //html/body/script[1]
-		`'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='`,
-		'www.google-analytics.com',
-		'www.googletagmanager.com',
 	],
-	imgSrc: [ `'self'`, 'www.google-analytics.com' ],
-	connectSrc: [ `'self'`, 'www.google-analytics.com' ],
+	imgSrc: [ `'self'`],
+	connectSrc: [ `'self'`],
 	frameSrc: [ `'self'` ],
 	fontSrc: [ `'self'`, 'data:' ],
 	objectSrc: [ `'self'` ],
 	mediaSrc: [ `'self'` ],
 };
 
-app.use(helmet.contentSecurityPolicy(csp));
-
 //  app.use(helmet.noCache()); // noCache disabled by default
 const SERVERPORT = process.env.SERVERPORT || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+const sixtyDaysInSeconds = 5184000 // 60 * 24 * 60 * 60
+
+// ======== *** SECURITY MIDDLEWARE ***
+
+//setup helmet js
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy(csp));
+app.use(helmet.hidePoweredBy());
+app.use(helmet.hsts({
+maxAge: sixtyDaysInSeconds
+}))
+
 
 app.use(
 	cors({
@@ -54,12 +60,9 @@ app.use(
 
 app.set('trust proxy', true); // trust first proxy
 app.disable('x-powered-by');
-app.use(helmet.hidePoweredBy());
-const sixtyDaysInSeconds = 5184000 // 60 * 24 * 60 * 60
-app.use(helmet.hsts({
-maxAge: sixtyDaysInSeconds
-}))
-//session middleware
+
+// Sessions allow us to Contact data on visitors from request to request
+// This keeps admins logged in and allows us to send flash messages
 app.use(
 	session({
 		/* This is a secret key that is used to encrypt the session. */
@@ -140,6 +143,7 @@ app.use(
 		extended: true,
 	}),
 );
+
 app.use(express.json());
 /* This is a middleware that is used to parse the body of the request. */
 const corsOptions = {
@@ -149,6 +153,7 @@ const corsOptions = {
 	optionsSuccessStatus: 200,
 	credentials: true,
 };
+
 app.use(cors(corsOptions));
 
 /*
@@ -173,6 +178,8 @@ app.use('/auth', authRouter);
 const test1Router = require('./test/test_1');
 app.use('/test', test1Router);
 
+
+// pass variables to our templates + all requests
 app.use((err, req, res, next) => {
 	// TODO:
 	// check session id in DB, if agent is logger return true else return false
@@ -194,21 +201,46 @@ app.use((err, req, res, next) => {
 	// It's also the SESSION_ID portion in 's:{SESSION_ID}.{SIGNATURE}'.
 	//console.log(req.sessionID);
 
-	const { headers: { cookie } } = req;
-	if (cookie) {
-		const values = cookie.split(';').reduce((res, item) => {
-			const data = item.trim().split('=');
-			return {
-				...res,
-				[data[0]]: data[1],
-			};
-		}, {});
-		res.locals.cookie = values;
-		req.sessionID = values.session_id;
-	} else res.locals.cookie = {};
-	console.error(err);
-	res.status(500).send('Internal server error');
+	// const { headers: { cookie } } = req;
+	// if (cookie) {
+	// 	const values = cookie.split(';').reduce((res, item) => {
+	// 		const data = item.trim().split('=');
+	// 		return {
+	// 			...res,
+	// 			[data[0]]: data[1],
+	// 		};
+	// 	}, {});
+	// 	res.locals.cookie = values;
+	// 	req.sessionID = values.session_id;
+	// } else res.locals.cookie = {};
+	// console.error(err);
+	// res.status(500).send('Internal server error');
+	req.session.views = (req.session.views || 0) + 1;
+	res.status(200).json({ req: req.session });
+	next(); // this will give you the above exception
 });
+
+
+// If that above routes didnt work, we 404 them and forward to error handler
+app.use(errorHandlers.notFound);
+
+// Otherwise this was a really bad error we didn't expect! Shoot eh
+if (app.get('env') === 'development') {
+  /* Development Error Handler - Prints stack trace */
+  app.use(errorHandlers.developmentErrors);
+}
+
+// production error handler
+app.use(errorHandlers.productionErrors);
+
+// Make sure we are running node 7.6+
+const [major, minor] = process.versions.node.split('.').map(parseFloat);
+if (major < 14 || (major === 14 && minor <= 0)) {
+  console.log('Please go to nodejs.org and download version 8 or greater. 👌\n ');
+  process.exit();
+}else{
+	console.log(process.versions.node, "hello ");
+}
 
 /* This is telling the server to listen to port 3001. */
 https

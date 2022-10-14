@@ -149,11 +149,8 @@ router.post('/login', (req, res) => {
 							role: result[0].role,
 							loggedIn: true,
 						};
-						req.session.views = (req.session.views || 0) + 1;
 						getSessionIDCookie(req, res);
 						creatSessionOnDB(req);
-						console.log(req.session);
-						console.log(req.session_id);
 						res.status(200).send({
 							msg: 'successfully',
 							session:req.session,
@@ -177,12 +174,6 @@ router.post('/login', (req, res) => {
 });
 
 
-router.get('/get', (req, res, next)=>{
-	req.session.views = (req.session.views || 0) + 1;
-	res.status(200).json({ req: req.session });
-	next(); // this will give you the above exception
-})
-
 router.get('/logout', (req, res, next) => {
 	// Note that the portion between 's%3A' and '.' is the session ID above.
 	// 's%3A' is URL encoded and decodes to 's:'. The last part is the signature.
@@ -190,7 +181,7 @@ router.get('/logout', (req, res, next) => {
 	// console.log(req.get('cookie'))
 
 	// Upon logout, we can destroy the session and unset req.session.
-	console.log(req.session.user.userID);
+	console.log(req.session);
 	var destroySession = destroySessionOnDB(req.session.user.userID);
 	console.log('logout completed', destroySession);
 	req.session.destroy();
