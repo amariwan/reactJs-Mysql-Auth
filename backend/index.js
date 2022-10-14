@@ -1,5 +1,6 @@
 /* This is importing the modules that we need to use in our application. */
 const express = require('express');
+require('./module/checkVersion');
 
 const helmet = require('helmet');
 const cors = require('cors'); //  A middleware that is used to parse the body of the request.
@@ -194,14 +195,6 @@ if (app.get('env') === 'development') {
 // production error handler
 app.use(errorHandlers.productionErrors);
 
-// Make sure we are running node 7.6+
-const [major, minor] = process.versions.node.split('.').map(parseFloat);
-if (major < 14 || (major === 14 && minor <= 0)) {
-  console.log('Please go to nodejs.org and download version 8 or greater. 👌\n ');
-  process.exit();
-}else{
-	console.log(process.versions.node, "hello ");
-}
 
 /* This is telling the server to listen to port 3001. */
 https
