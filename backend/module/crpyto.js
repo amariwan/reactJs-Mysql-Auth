@@ -1,45 +1,51 @@
-const crypto = require('crypto');
+const CryptoJS = require('crypto-js/sha256');
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 /* The key used to encrypt and decrypt the data. */
 const viByte = process.env.viByte;
 const algorithm = process.env.algorithm;
 const secretKey = process.env.secretKey;
 
+/* The key used to encrypt and decrypt the data. */
 
+const encrypt = (plainText) => {
+	if (plainText === null && plainText.length === 0) return null;
 
-const encrypt = (text) => {
-
-  if (text === null && text.length === 0) return null;
-
-  /* Creating a random 16 byte string. */
-  const iv = crypto.randomBytes(viByte);
-
-  /* Creating a cipher object. */
-  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
-
-  /* Concatenating the cipher.update(text) and cipher.final() into a single buffer. */
-  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-
-  return {
-    iv: iv.toString('hex'),
-    content: encrypted.toString('hex')
-  };
+	// do not use a global iv for production,
+	// generate a new one for each encryption
+	// const iv = crypto.randomBytes(64).toString('hex');
+	const iv = uuidv4(); //instead of crypto.randomBytes(64).toString('hex')
+	/* Creating a cipher object. */
+	const encrypted = CryptoJS.AES.encrypt(plainText, secretKey, {
+		keySize: 16,
+		iv: iv,
+		mode: CryptoJS.mode.ECB,
+		padding: CryptoJS.pad.Pkcs7,
+	});
+	return {
+		iv: iv.toString('hex'),
+		content: encrypted,
+	};
 };
 
-const decrypt = (hash) => {
+const decrypt = (cipher) => {
+	if ((cipher === null && cipher.length === 0) || typeof cipher !== 'object') return cipher;
 
-  if (hash === null && hash.length === 0 || typeof hash !== "object" ) return hash;
-  /* Creating a decipher object. */
-  const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
 
-  /* Decrypting the content. */
-  const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
+	/* Decrypting the content. */
+	const plainText = CryptoJS.AES.decrypt(cipher.content, secretKey, {
+		keySize: 16,
+		iv: cipher.iv,
+		mode: CryptoJS.mode.ECB,
+		padding: CryptoJS.pad.Pkcs7,
+	});
 
-  /* Returning the decrypted string. */
-  return decrpyted.toString();
+	/* Returning the decrypted string. */
+	return plainText.toString(CryptoJS.enc.Utf8);
 };
 
 module.exports = {
-  encrypt,
-  decrypt
+	encrypt,
+	decrypt,
 };
+

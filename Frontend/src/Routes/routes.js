@@ -1,13 +1,26 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
 
 import Login from '../Pages/Login';
 import Dashboard from '../Pages/Dashboard';
 import Register from '../Pages/Register';
 import PageNotFound from '../Pages/PageNotFound';
+let logado;
+axios
+	.get('https://localhost:4000/', {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		withCredentials: true,
+		method: 'GET',
+	})
+	.then((response) => {
+		console.log(response);
+	});
 
-const logado = localStorage.getItem('@user');
-console.log(logado);
+
+// const logado = localStorage.getItem('@user');
 const Rotas = () => {
 	return (
 		<BrowserRouter>

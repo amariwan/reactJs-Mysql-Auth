@@ -106,6 +106,8 @@ router.post('/login', (req, res) => {
 	// store is never updated, even though a new session is generated on each
 	// request. After we modify that session and during req.end(), it gets
 	// persisted. On subsequent writes, it's updated and synced with the store.
+
+	console.log(req.body)
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = decrypt(req.body.password);
 	var userOrEmail = 'username';
@@ -138,6 +140,7 @@ router.post('/login', (req, res) => {
 					if (req.session.user) {
 						res.status(200).send({
 							user: req.session.user,
+							code: 105
 						});
 					} else {
 						console.log('User not logged in');
@@ -153,7 +156,7 @@ router.post('/login', (req, res) => {
 						creatSessionOnDB(req);
 						res.status(200).send({
 							msg: 'successfully',
-							session:req.session,
+							user:req.session.user,
 							code: 105
 						});
 					}

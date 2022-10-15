@@ -3,14 +3,10 @@
     "version": "1.0.0",
     "license": "ISC",
     "dependencies": {
-        "@testing-library/jest-dom": "^5.16.4",
-        "@testing-library/react": "^13.3.0",
-        "@testing-library/user-event": "^13.5.0",
         "axios": "^0.27.2",
         "bcryptjs": "^2.4.3",
-        "chart.js": "^3.8.0",
-        "crypto": "^1.0.1",
         "crypto-browserify": "^3.12.0",
+        "crypto-js": "^4.1.1",
         "dotenv": "^16.0.2",
         "formik": "^2.2.9",
         "framer-motion": "^7.3.2",
@@ -23,12 +19,13 @@
         "react-native-dotenv": "^3.3.1",
         "react-router-dom": "^6.3.0",
         "react-scripts": "^5.0.1",
+        "react-test-renderer": "^18.2.0",
         "react-toast": "^1.0.3",
         "web-vitals": "^2.1.4",
         "yup": "^0.32.11"
     },
     "scripts": {
-        "start": "export HTTPS=true SSL_CRT_FILE=./https_key/cert.pem && SSL_KEY_FILE=key.pem react-scripts start",
+        "start": "export HTTPS=true SSL_CRT_FILE=./https_key/cert.pem && SSL_KEY_FILE=./https_key/key.pem react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

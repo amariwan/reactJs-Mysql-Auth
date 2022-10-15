@@ -16,7 +16,7 @@ function Header() {
             console.log(response.data.session);
             return response;
         });
-        localStorage.clear();
+        // localStorage.clear();
         // window.location.reload();
     }
 

@@ -32,22 +32,22 @@ const Login = ({ logado = false }) => {
 		).then((response) => {
 			console.log(response);
 			if (response.status === 200) {
-				if (response.data.session.user.username === values.email) {
-					localStorage.setItem('@user', JSON.stringify(response.data.user));
+				if (response.data.user.username === values.email) {
+					// localStorage.setItem('@user', JSON.stringify(response.data.user.username));
 					// window.location.reload();
 					toast(response.data.msg, {
 						position: 'bottom-right',
 						id: notify, // Custom Icon
 						icon: '👏',
 					});
-				} else {
-					if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right', id: notify });
-					if (response.data.code === 101) return toast(response.data.msg, { position: 'bottom-right', id: notify });
-					if (response.data.code === 102) return toast(response.data.msg, { position: 'bottom-right', id: notify });
-					if (response.data.code === 103) return toast(response.data.msg, { position: 'bottom-right', id: notify });
-					if (response.data.code === 104) return toast(response.data.msg, { position: 'bottom-right', id: notify });
-					if (response.data.code === 105) return toast(response.data.msg, { position: 'bottom-right', id: notify });
 				}
+			} else {
+				if (response.data.code === 100) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 101) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 102) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 103) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 104) return toast(response.data.msg, { position: 'bottom-right', id: notify });
+				if (response.data.code === 105) return toast(response.data.msg, { position: 'bottom-right', id: notify });
 			}
 		});
 	};

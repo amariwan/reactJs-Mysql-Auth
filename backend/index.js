@@ -179,8 +179,18 @@ app.use('/auth', authRouter);
 const test1Router = require('./test/test_1');
 app.use('/test', test1Router);
 
-
-
+app.get('/', (req, res, next) => {
+	if (req.session.user) {
+		res.status(200).send({
+			loggedIn: true,
+			user: req.session.user,
+		});
+	} else {
+		res.status(500).send({
+			loggedIn: false,
+		});
+	}
+});
 // pass variables to our templates + all requests
 
 // If that above routes didnt work, we 404 them and forward to error handler
