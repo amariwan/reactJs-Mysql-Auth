@@ -5,15 +5,21 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { encrypt, decrypt } from '../module/crpyto';
-
+import { encrypt, decrypt, otp } from '../module/myCrypto';
+// require('../module/t.js')
 let notify = null;
 
+var t = encrypt("ich")
+console.log(t)
+console.log(decrypt(t), "t")
+
+
 const Login = ({ logado = false }) => {
+
 	const [ isActive, setIsActive ] = useState(false);
 	const handleLogin = (values) => {
 		notify = toast.loading('Loading...');
-		var email = values.email.toLowerCase();
+		const email = values.email.toLowerCase();
 		var emailHash = encrypt(email);
 		var passwordHash = encrypt(values.password);
 		Axios.post(

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router(); // Creating a router object.
 const db = require('../database/index');
 const bcrypt = require('bcrypt'); // A library that is used to hash passwords.
-const { encrypt, decrypt } = require('../module/crpyto');
+const { encrypt, decrypt } = require('../module/myCrypto');
 const { isEmail, checkUsername } = require('../module/check_userOrEmail');
 const { creatSessionOnDB, getSessionOnDB, setSessionOnDB, compareSessionOnDB, destroySessionOnDB } = require('../module/session');
 const { clearAllcookie, getSessionIDCookie } = require('../module/cookie');
@@ -16,7 +16,7 @@ router.post('/register', (req, res) => {
 	const lastname = decrypt(req.body.lastname).toLowerCase();
 	const username = decrypt(req.body.username).toLowerCase();
 	const email = decrypt(req.body.email).toLowerCase();
-	const password = req.body.password;
+	const password = decrypt(req.body.password);
 	/* This is checking if the email is valid. */
 	if (!isEmail(email)) {
 		res.status(203).send({
@@ -43,32 +43,36 @@ router.post('/register', (req, res) => {
 
 	/* This is checking if the username is already registered. */
 	db.query('SELECT * FROM users WHERE username = ?', [ username ], function(err, result) {
-		if (err) throw res.status(500).send({
-			msg: err,
-		});;
+		if (err)
+			throw res.status(500).send({
+				msg: err,
+			});
 		if (result.length == 0) {
 			/* This is checking if the Email is already registered. */
 			db.query('SELECT * FROM users WHERE email = ?', [ email ], function(err, result) {
-				if (err) throw res.status(500).send({
-					msg: err,
-				});
+				if (err)
+					throw res.status(500).send({
+						msg: err,
+					});
 				if (result.length == 0) {
 					/* This is inserting the data into the database. */
-					db.query('INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)', [ name, lastname, username, email, password ], (error, response) => {
-						if (error) {
-							res.status(500).send({
-								msg: error,
-							});
-						} else if (err) {
-							res.status(500).send({
-								msg: err,
-							});
-						} else {
-							res.status(200).send({
-								msg: 'User successfully registered',
-								code: 201,
-							});
-						}
+					bcrypt.hash(password, saltRounds, (err, hash) => {
+						db.query('INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)', [ name, lastname, username, email, hash ], (error, response) => {
+							if (error) {
+								res.status(500).send({
+									msg: error,
+								});
+							} else if (err) {
+								res.status(500).send({
+									msg: err,
+								});
+							} else {
+								res.status(200).send({
+									msg: 'User successfully registered',
+									code: 201,
+								});
+							}
+						});
 					});
 				} else {
 					res.status(203).send({
@@ -86,20 +90,6 @@ router.post('/register', (req, res) => {
 	});
 });
 
-router.get('/login', (req, res) => {
-	console.log(req.session_id);
-	if (req.session.user) {
-		res.status(200).send({
-			loggedIn: true,
-			user: req.session.user,
-		});
-	} else {
-		res.status(500).send({
-			loggedIn: false,
-		});
-	}
-});
-
 /* This is a post request that is used to login a user. */
 router.post('/login', (req, res) => {
 	// Unless we explicitly write to the session (and resave is false), the
@@ -107,7 +97,7 @@ router.post('/login', (req, res) => {
 	// request. After we modify that session and during req.end(), it gets
 	// persisted. On subsequent writes, it's updated and synced with the store.
 
-	console.log(req.body)
+	console.log(req.body);
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = decrypt(req.body.password);
 	var userOrEmail = 'username';
@@ -140,7 +130,7 @@ router.post('/login', (req, res) => {
 					if (req.session.user) {
 						res.status(200).send({
 							user: req.session.user,
-							code: 105
+							code: 105,
 						});
 					} else {
 						console.log('User not logged in');
@@ -156,8 +146,8 @@ router.post('/login', (req, res) => {
 						creatSessionOnDB(req);
 						res.status(200).send({
 							msg: 'successfully',
-							user:req.session.user,
-							code: 105
+							user: req.session.user,
+							code: 105,
 						});
 					}
 				} else {
@@ -175,7 +165,6 @@ router.post('/login', (req, res) => {
 		}
 	});
 });
-
 
 router.get('/logout', (req, res, next) => {
 	// Note that the portion between 's%3A' and '.' is the session ID above.

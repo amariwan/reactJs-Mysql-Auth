@@ -25,11 +25,9 @@ const app = express();
 const csp = {
 	defaultSrc: [ `'none'` ],
 	styleSrc: [ `'self'`, `'unsafe-inline'` ],
-	scriptSrc: [
-		`'self'`,
-	],
-	imgSrc: [ `'self'`],
-	connectSrc: [ `'self'`],
+	scriptSrc: [ `'self'` ],
+	imgSrc: [ `'self'` ],
+	connectSrc: [ `'self'` ],
 	frameSrc: [ `'self'` ],
 	fontSrc: [ `'self'`, 'data:' ],
 	objectSrc: [ `'self'` ],
@@ -39,7 +37,7 @@ const csp = {
 //  app.use(helmet.noCache()); // noCache disabled by default
 const SERVERPORT = process.env.SERVERPORT || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
-const sixtyDaysInSeconds = 5184000 // 60 * 24 * 60 * 60
+const sixtyDaysInSeconds = 5184000; // 60 * 24 * 60 * 60
 
 // ======== *** SECURITY MIDDLEWARE ***
 
@@ -47,10 +45,11 @@ const sixtyDaysInSeconds = 5184000 // 60 * 24 * 60 * 60
 app.use(helmet());
 app.use(helmet.contentSecurityPolicy(csp));
 app.use(helmet.hidePoweredBy());
-app.use(helmet.hsts({
-maxAge: sixtyDaysInSeconds
-}))
-
+app.use(
+	helmet.hsts({
+		maxAge: sixtyDaysInSeconds,
+	}),
+);
 
 app.use(
 	cors({
@@ -186,7 +185,7 @@ app.get('/', (req, res, next) => {
 			user: req.session.user,
 		});
 	} else {
-		res.status(500).send({
+		res.status(200).send({
 			loggedIn: false,
 		});
 	}
@@ -198,13 +197,12 @@ app.use(errorHandlers.notFound);
 
 // Otherwise this was a really bad error we didn't expect! Shoot eh
 if (app.get('env') === 'development') {
-  /* Development Error Handler - Prints stack trace */
-  app.use(errorHandlers.developmentErrors);
+	/* Development Error Handler - Prints stack trace */
+	app.use(errorHandlers.developmentErrors);
 }
 
 // production error handler
 app.use(errorHandlers.productionErrors);
-
 
 /* This is telling the server to listen to port 3001. */
 https
