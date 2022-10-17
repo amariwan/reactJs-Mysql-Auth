@@ -5,7 +5,7 @@ import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { encrypt, decrypt } from '../module/crpyto';
+import { encrypt, decrypt } from '../module/myCrypto';
 import bcrypt from 'bcryptjs'; // A library that is used to hash passwords.
 const saltRounds = 10;
 
@@ -18,12 +18,11 @@ const Register = ({ logado = false }) => {
 		var lastname = values.lastname.toLowerCase();
 		var username = values.username.toLowerCase();
 		var email = values.email.toLowerCase();
-		var password = values.password;
-		var nameHash = encrypt(name).toLowerCase();
-		var lastnameHash = encrypt(lastname).toLowerCase();
-		var usernameHash = encrypt(username).toLowerCase();
-		var emailHash = encrypt(email).toLowerCase();
-		var passwordHash = bcrypt.hashSync(password, saltRounds); // hash created previously created upon sign up;
+		var nameHash = encrypt(name);
+		var lastnameHash = encrypt(lastname);
+		var usernameHash = encrypt(username);
+		var emailHash = encrypt(email);
+		var passwordHash = bcrypt.hashSync(values.password, saltRounds); // hash created previously created upon sign up;
 		Axios.post(
 			'https://localhost:4000/auth/register',
 			{

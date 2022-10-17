@@ -8,6 +8,7 @@ const { creatSessionOnDB, getSessionOnDB, setSessionOnDB, compareSessionOnDB, de
 const { clearAllcookie, getSessionIDCookie } = require('../module/cookie');
 
 const saltRounds = 10; // The number of rounds to use when generating a salt
+// bcrypt.hash(password, saltRounds, (err, hash) => {});
 
 /* This is a post request that is used to register a user. */
 router.post('/register', (req, res) => {
@@ -16,8 +17,11 @@ router.post('/register', (req, res) => {
 	const lastname = decrypt(req.body.lastname).toLowerCase();
 	const username = decrypt(req.body.username).toLowerCase();
 	const email = decrypt(req.body.email).toLowerCase();
-	const password = decrypt(req.body.password);
+	const password = req.body.password;
 	/* This is checking if the email is valid. */
+
+	console.log('a', decrypt(req.body.password));
+	console.log('b', req.body.password);
 	if (!isEmail(email)) {
 		res.status(203).send({
 			msg: 'Invalid email',
@@ -56,23 +60,21 @@ router.post('/register', (req, res) => {
 					});
 				if (result.length == 0) {
 					/* This is inserting the data into the database. */
-					bcrypt.hash(password, saltRounds, (err, hash) => {
-						db.query('INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)', [ name, lastname, username, email, hash ], (error, response) => {
-							if (error) {
-								res.status(500).send({
-									msg: error,
-								});
-							} else if (err) {
-								res.status(500).send({
-									msg: err,
-								});
-							} else {
-								res.status(200).send({
-									msg: 'User successfully registered',
-									code: 201,
-								});
-							}
-						});
+					db.query('INSERT INTO users (name, lastname, username, email, password ) VALUE (?,?,?,?,?)', [ name, lastname, username, email, password ], (error, response) => {
+						if (error) {
+							res.status(500).send({
+								msg: error,
+							});
+						} else if (err) {
+							res.status(500).send({
+								msg: err,
+							});
+						} else {
+							res.status(200).send({
+								msg: 'User successfully registered',
+								code: 201,
+							});
+						}
 					});
 				} else {
 					res.status(203).send({
@@ -97,10 +99,10 @@ router.post('/login', (req, res) => {
 	// request. After we modify that session and during req.end(), it gets
 	// persisted. On subsequent writes, it's updated and synced with the store.
 
-	console.log(req.body);
 	const email = decrypt(req.body.email).toLowerCase();
 	const password = decrypt(req.body.password);
 	var userOrEmail = 'username';
+	console.log(password);
 
 	/* This is checking if the email or username. */
 	if (isEmail(email)) {

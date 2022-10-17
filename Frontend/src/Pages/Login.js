@@ -9,11 +9,6 @@ import { encrypt, decrypt, otp } from '../module/myCrypto';
 // require('../module/t.js')
 let notify = null;
 
-var t = encrypt("ich")
-console.log(t)
-console.log(decrypt(t), "t")
-
-
 const Login = ({ logado = false }) => {
 
 	const [ isActive, setIsActive ] = useState(false);
