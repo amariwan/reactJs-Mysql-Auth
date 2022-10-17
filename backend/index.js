@@ -175,8 +175,7 @@ app.use(cookieParser(SESSION_SECRET)); // any string ex: 'keyboard cat'
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
-const test1Router = require('./test/test_1');
-app.use('/test', test1Router);
+
 
 app.get('/', (req, res, next) => {
 	if (req.session.user) {
