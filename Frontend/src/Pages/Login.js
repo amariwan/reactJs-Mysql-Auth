@@ -39,8 +39,8 @@ const Login = ({ logado = false }) => {
 			console.log(response);
 			if (response.status === 200) {
 				if (response.data.user.username === values.email) {
-					// localStorage.setItem('@user', JSON.stringify(response.data.user.username));
-					// window.location.reload();
+					localStorage.setItem('@user', JSON.stringify(response.data.user.username));
+					window.location.reload();
 					toast(response.data.msg, {
 						position: 'bottom-right',
 						id: notify, // Custom Icon
