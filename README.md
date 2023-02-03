@@ -2,7 +2,7 @@
 
 
 <h1 align="center">
-  🚧 ReactJs Auth with MySQL API 🚧
+ReactJs Auth with MySQL API
 	<br>
 </h1>
 
